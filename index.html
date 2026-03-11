@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nollie — Campaign Attribution v3</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-primary: #0f0f14;
+    --bg-secondary: #16161d;
+    --bg-card: #1e1e28;
+    --bg-hover: #1a1a24;
+    --border: #2a2a35;
+    --border-light: rgba(42,42,53,0.5);
+    --text-primary: #fafafa;
+    --text-secondary: #e4e4e7;
+    --text-muted: #a1a1aa;
+    --text-dim: #71717a;
+    --text-faint: #52525b;
+    --purple: #c084fc;
+    --purple-dark: #a78bfa;
+    --purple-deep: #7c3aed;
+    --purple-light: #c4b5fd;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --red: #ef4444;
+    --indigo: #818cf8;
+    --pink: #ec4899;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    min-height: 100vh;
+    display: flex;
+    padding-top: 30px;
+  }
+
+  /* ── Prototype Banner ── */
+  .prototype-banner {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: var(--purple);
+    color: var(--bg-primary);
+    text-align: center;
+    padding: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    z-index: 100;
+  }
+
+  /* ── State Switcher ── */
+  .state-switcher {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    z-index: 200;
+    width: 300px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .state-switcher h3 {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .state-switcher label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .state-switcher label:hover { color: var(--text-primary); }
+  .state-switcher label.active-label { color: var(--purple); font-weight: 500; }
+  .state-switcher input[type="radio"] { accent-color: var(--purple); }
+  .state-group { margin-bottom: 14px; }
+  .state-group-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+  .switcher-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px; height: 40px;
+    background: var(--purple-deep);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 201;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(124,58,237,0.4);
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 72px;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .sidebar-logo {
+    width: 36px; height: 36px;
+    background: var(--purple);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 16px; font-weight: 700;
+    margin-bottom: 24px;
+  }
+  .sidebar-item {
+    width: 56px; height: 52px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border-radius: 10px;
+    color: var(--text-dim);
+    font-size: 10px;
+    gap: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .sidebar-item:hover { background: var(--bg-card); color: var(--text-muted); }
+  .sidebar-item.active { background: var(--bg-card); color: var(--purple); }
+  .sidebar-item svg { width: 20px; height: 20px; }
+  .sidebar-spacer { flex: 1; }
+  .sidebar-item.support { margin-top: auto; }
+
+  /* ── Main Content ── */
+  .main-content {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* ── Campaign List Panel ── */
+  .campaign-list {
+    width: 380px;
+    min-width: 380px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+  }
+  .campaign-list-header {
+    padding: 20px 20px 14px;
+  }
+  .campaign-list-header h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+  }
+  .campaign-search {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .search-input-wrap {
+    flex: 1;
+    position: relative;
+  }
+  .search-input-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px; height: 14px;
+    color: var(--text-dim);
+  }
+  .search-input-wrap input {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 10px 7px 32px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+  }
+  .search-input-wrap input:focus { border-color: var(--purple); }
+  .search-input-wrap input::placeholder { color: var(--text-dim); }
+  .sort-btn, .filter-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    color: var(--text-muted);
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  .sort-btn:hover, .filter-btn:hover { border-color: var(--text-dim); }
+
+  /* Campaign table */
+  .campaign-table-header {
+    display: grid;
+    grid-template-columns: 28px 1fr 80px;
+    padding: 8px 20px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .campaign-table {
+    flex: 1;
+    overflow-y: auto;
+  }
+  .campaign-row {
+    display: grid;
+    grid-template-columns: 28px 1fr 80px;
+    padding: 12px 20px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: background 0.1s;
+    align-items: center;
+  }
+  .campaign-row:hover { background: var(--bg-hover); }
+  .campaign-row.active { background: var(--bg-card); }
+  .campaign-row.active .campaign-name { color: var(--purple); }
+  .campaign-checkbox {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.15s;
+  }
+  .campaign-checkbox:hover { border-color: var(--text-dim); }
+  .campaign-name-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .campaign-name {
+    color: var(--text-secondary);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .campaign-meta {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .campaign-status-col {
+    text-align: right;
+    font-size: 11px;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .status-badge.sent { color: var(--green); }
+  .status-badge.draft { color: var(--text-dim); }
+  .status-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .campaign-pagination {
+    padding: 10px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ── Detail Drawer ── */
+  .drawer {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--bg-secondary);
+  }
+  .drawer-header {
+    padding: 20px 24px 0;
+    position: sticky;
+    top: 0;
+    background: var(--bg-secondary);
+    z-index: 10;
+  }
+  .drawer-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .drawer-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .drawer-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+  .drawer-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .drawer-actions button {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    width: 32px; height: 32px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .drawer-actions button:hover { border-color: var(--text-dim); color: var(--text-muted); }
+
+  /* Kebab dropdown */
+  .kebab-wrap { position: relative; }
+  .kebab-menu {
+    display: none;
+    position: absolute;
+    top: 38px;
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px;
+    min-width: 140px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    z-index: 20;
+  }
+  .kebab-menu.show { display: block; }
+  .kebab-menu-item {
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .kebab-menu-item:hover { background: var(--bg-hover); color: var(--text-secondary); }
+  .kebab-menu-item.danger { color: var(--red); }
+  .kebab-menu-item.danger:hover { background: rgba(239,68,68,0.1); }
+
+  /* Tabs */
+  .view-tabs {
+    display: flex;
+    gap: 0;
+    margin-top: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .view-tab {
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .view-tab:hover { color: var(--text-muted); }
+  .view-tab.active { color: var(--purple); border-bottom-color: var(--purple); }
+
+  .drawer-body {
+    padding: 20px 24px 40px;
+  }
+
+  /* ── Send Performance Cards ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 24px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .send-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .send-stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .send-stat-icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  .send-stat-icon.delivered { background: rgba(34,197,94,0.12); color: var(--green); }
+  .send-stat-icon.opened { background: rgba(59,130,246,0.12); color: var(--blue); }
+  .send-stat-icon.clicked { background: rgba(192,132,252,0.12); color: var(--purple); }
+  .send-stat-icon.bounced { background: rgba(239,68,68,0.12); color: var(--red); }
+  .send-stat-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .send-stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+  .send-stat-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  /* ── Attribution Results ── */
+  .attribution-section {
+    margin-top: 12px;
+  }
+
+  /* Progress bar */
+  .progress-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .progress-bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: rgba(42,42,53,0.8);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+  .progress-bar-fill.complete { background: var(--green); width: 100%; }
+  .progress-bar-fill.partial { background: var(--blue); }
+  .progress-check {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+  .progress-check.complete { background: var(--green); color: white; }
+  .progress-check.partial { background: var(--blue); color: white; }
+  .progress-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .progress-text strong { color: var(--text-secondary); font-weight: 600; }
+
+  /* Metric cards */
+  .attr-metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .attr-metrics-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .attr-metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .attr-metric-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+  .attr-metric-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .attr-metric-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 1px;
+  }
+
+  /* ── Empty/Upsell States ── */
+  .empty-state {
+    background: var(--bg-card);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    padding: 32px 24px;
+    text-align: center;
+    margin-top: 12px;
+  }
+  .empty-state-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    opacity: 0.6;
+  }
+  .empty-state-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  .empty-state-text {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .empty-state-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--indigo);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .empty-state-link:hover { text-decoration: underline; }
+
+  /* Partial metrics (no avg spend) */
+  .upsell-metric-card {
+    background: var(--bg-card);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .upsell-metric-text {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+  .upsell-metric-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--indigo);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* ── Generate Debrief Button ── */
+  .generate-debrief-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, var(--purple-deep), #6d28d9);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    letter-spacing: 0.2px;
+    font-family: inherit;
+  }
+  .generate-debrief-btn:hover {
+    background: linear-gradient(135deg, #8b5cf6, var(--purple-deep));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);
+  }
+  .generate-debrief-btn:disabled {
+    opacity: 0.7;
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ── AI Debrief Card ── */
+  .debrief-card {
+    margin-top: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--pink);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .debrief-header {
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .debrief-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--purple-light);
+  }
+  .debrief-header-left svg { width: 16px; height: 16px; }
+  .debrief-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .debrief-btn {
+    background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 6px;
+    color: var(--purple-dark);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .debrief-btn:hover { background: rgba(124,58,237,0.25); }
+  .debrief-body {
+    padding: 18px;
+  }
+  .debrief-headline {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .debrief-summary {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .debrief-metrics-row {
+    display: flex;
+    gap: 0;
+    background: rgba(34,197,94,0.06);
+    border-radius: 8px;
+    padding: 10px 0;
+    margin-bottom: 18px;
+    overflow: hidden;
+  }
+  .debrief-metric-item {
+    flex: 1;
+    text-align: center;
+    padding: 2px 12px;
+  }
+  .debrief-metric-item + .debrief-metric-item {
+    border-left: 1px solid var(--border);
+  }
+  .debrief-metric-val {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .debrief-metric-lbl {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 1px;
+  }
+  .debrief-section {
+    margin-bottom: 14px;
+  }
+  .debrief-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--purple-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .debrief-section-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .debrief-footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .debrief-footer svg { width: 14px; height: 14px; flex-shrink: 0; color: var(--text-dim); }
+
+  /* ── Email Preview Tab ── */
+  .email-preview-tab { margin-top: 16px; }
+  .email-subject-field {
+    margin-bottom: 12px;
+  }
+  .email-subject-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .email-subject-input {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-family: inherit;
+  }
+  .email-body-preview {
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .email-hero-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+  }
+  .email-body-content {
+    padding: 24px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+  }
+  .email-body-content p { margin-bottom: 14px; }
+  .email-body-content .greeting { font-size: 16px; font-weight: 600; color: #111; }
+  .email-cta-btn {
+    display: inline-block;
+    background: var(--purple-deep);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 10px 0 20px;
+  }
+  .email-fine-print {
+    font-size: 11px;
+    color: #999;
+    margin-top: 16px;
+  }
+
+  /* ── Recipients Tab ── */
+  .recipients-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 16px 0 12px;
+  }
+  .recipients-search {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    outline: none;
+    width: 200px;
+    font-family: inherit;
+  }
+  .recipients-search::placeholder { color: var(--text-dim); }
+  .recipients-table {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .recipients-table-header {
+    display: grid;
+    grid-template-columns: 1fr 100px 80px 90px;
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--bg-hover);
+    border-bottom: 1px solid var(--border);
+  }
+  .recipients-table-header span { cursor: pointer; }
+  .recipients-table-header .sortable::after { content: ' ↓'; font-size: 9px; }
+  .recipient-row {
+    display: grid;
+    grid-template-columns: 1fr 100px 80px 90px;
+    padding: 11px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border-light);
+    align-items: center;
+  }
+  .recipient-row:last-child { border-bottom: none; }
+  .recipient-name { color: var(--text-secondary); }
+  .recipient-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+  }
+  .recipient-status .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .recipient-status .dot.opened { background: var(--green); }
+  .recipient-status .dot.delivered { background: var(--blue); }
+  .recipient-status .dot.bounced { background: var(--red); }
+  .recipient-clicked { font-size: 12px; }
+  .recipient-clicked.yes { color: var(--green); }
+  .recipient-clicked.no { color: var(--text-dim); }
+  .recipient-booked { font-size: 12px; font-weight: 500; }
+  .recipient-booked.yes { color: var(--green); }
+  .recipient-booked.no { color: var(--text-dim); }
+
+  .recipients-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .recipients-pagination .page-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .page-btn {
+    padding: 4px 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-dim);
+    font-size: 11px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .page-btn:hover { border-color: var(--text-dim); color: var(--text-muted); }
+  .page-btn.active { background: var(--purple-deep); border-color: var(--purple-deep); color: white; }
+  .rows-per-page {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .rows-per-page select {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-muted);
+    font-size: 11px;
+    padding: 3px 6px;
+    font-family: inherit;
+  }
+
+  /* ── Automation Time Toggles ── */
+  .time-toggles {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 14px;
+  }
+  .time-toggle {
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-dim);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .time-toggle:hover { border-color: var(--text-dim); color: var(--text-muted); }
+  .time-toggle.active {
+    background: var(--purple-deep);
+    border-color: var(--purple-deep);
+    color: white;
+  }
+
+  /* ── Loading Skeleton ── */
+  @keyframes shimmer {
+    0% { background-position: -200px 0; }
+    100% { background-position: 200px 0; }
+  }
+  .skeleton {
+    background: linear-gradient(90deg, var(--bg-card) 25%, #252533 50%, var(--bg-card) 75%);
+    background-size: 400px 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 6px;
+  }
+
+  /* ── Toast Notification ── */
+  .notification-toast {
+    position: fixed;
+    top: 50px;
+    right: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--purple);
+    border-radius: 10px;
+    padding: 14px 18px;
+    width: 340px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    z-index: 99;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  .notification-toast.show {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  .toast-header {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--purple-light);
+    margin-bottom: 4px;
+  }
+  .toast-body {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .toast-close {
+    position: absolute;
+    top: 10px; right: 12px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3a3a4a; }
+
+  /* Hidden helper */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="prototype-banner">NOL-18 / NOL-1034 &middot; Campaign Attribution Prototype v3 &middot; March 2026</div>
+
+<!-- Toast Notification -->
+<div class="notification-toast" id="toast">
+  <button class="toast-close" onclick="hideToast()">&times;</button>
+  <div class="toast-header">Campaign Debrief Ready</div>
+  <div class="toast-body">
+    Your debrief for "Wings Wednesday — Feb Special" is ready.<br>
+    <strong style="color:var(--green)">23 bookings &middot; 67 covers &middot; $4,280.00 revenue</strong>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-logo">N</div>
+  <div class="sidebar-item">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6Z"/><path d="M3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25Z"/><path d="M13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6Z"/><path d="M13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"/></svg>
+    <span>Dashboard</span>
+  </div>
+  <div class="sidebar-item active">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M21.75 9v.906a2.25 2.25 0 0 1-1.183 1.981l-6.478 3.488M2.25 9v.906a2.25 2.25 0 0 0 1.183 1.981l6.478 3.488m8.839 2.51-4.66-2.51m0 0-1.023-.55a2.25 2.25 0 0 0-2.134 0l-1.022.55m0 0-4.661 2.51m16.5 1.615a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V8.844a2.25 2.25 0 0 1 1.183-1.981l7.5-4.039a2.25 2.25 0 0 1 2.134 0l7.5 4.039a2.25 2.25 0 0 1 1.183 1.98V19.5Z"/></svg>
+    <span>Campaigns</span>
+  </div>
+  <div class="sidebar-item">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/></svg>
+    <span>Customers</span>
+  </div>
+  <div class="sidebar-item">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/><path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+    <span>Settings</span>
+  </div>
+  <div class="sidebar-spacer"></div>
+  <div class="sidebar-item support">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/></svg>
+    <span>Support</span>
+  </div>
+</nav>
+
+<!-- Main -->
+<div class="main-content">
+
+  <!-- Campaign List -->
+  <div class="campaign-list">
+    <div class="campaign-list-header">
+      <h1>Campaigns</h1>
+      <div class="campaign-search">
+        <div class="search-input-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
+          <input type="text" placeholder="Search campaigns...">
+        </div>
+        <button class="sort-btn">Last modified &#9662;</button>
+        <button class="filter-btn">Filters</button>
+      </div>
+    </div>
+    <div class="campaign-table-header">
+      <span></span>
+      <span>Name</span>
+      <span style="text-align:right">Status</span>
+    </div>
+    <div class="campaign-table">
+      <div class="campaign-row active" onclick="selectCampaign(this, 'oneoff')">
+        <div class="campaign-checkbox"></div>
+        <div class="campaign-name-cell">
+          <span class="campaign-name">Wings Wednesday — Feb Special</span>
+          <span class="campaign-meta">Email &middot; 4 Feb 2026</span>
+        </div>
+        <div class="campaign-status-col">
+          <span class="status-badge sent"><span class="dot"></span> Sent</span>
+        </div>
+      </div>
+      <div class="campaign-row" onclick="selectCampaign(this, 'oneoff')">
+        <div class="campaign-checkbox"></div>
+        <div class="campaign-name-cell">
+          <span class="campaign-name">Velvet Echo live this weekend...</span>
+          <span class="campaign-meta">Email &middot; 28 Jan 2026</span>
+        </div>
+        <div class="campaign-status-col">
+          <span class="status-badge sent"><span class="dot"></span> Sent</span>
+        </div>
+      </div>
+      <div class="campaign-row" onclick="selectCampaign(this, 'oneoff')">
+        <div class="campaign-checkbox"></div>
+        <div class="campaign-name-cell">
+          <span class="campaign-name">Long Weekend Feast: Savour...</span>
+          <span class="campaign-meta">Email &middot; 22 Jan 2026</span>
+        </div>
+        <div class="campaign-status-col">
+          <span class="status-badge sent"><span class="dot"></span> Sent</span>
+        </div>
+      </div>
+      <div class="campaign-row" onclick="selectCampaign(this, 'automation')">
+        <div class="campaign-checkbox"></div>
+        <div class="campaign-name-cell">
+          <span class="campaign-name">Post-Dining Feedback</span>
+          <span class="campaign-meta">Email, WhatsApp &middot; Automation</span>
+        </div>
+        <div class="campaign-status-col">
+          <span class="status-badge sent"><span class="dot"></span> Active</span>
+        </div>
+      </div>
+      <div class="campaign-row" onclick="selectCampaign(this, 'oneoff')">
+        <div class="campaign-checkbox"></div>
+        <div class="campaign-name-cell">
+          <span class="campaign-name">Get 10% off on your birthday...</span>
+          <span class="campaign-meta">Email, SMS &middot; 15 Jan 2026</span>
+        </div>
+        <div class="campaign-status-col">
+          <span class="status-badge sent"><span class="dot"></span> Sent</span>
+        </div>
+      </div>
+      <div class="campaign-row" onclick="selectCampaign(this, 'oneoff')">
+        <div class="campaign-checkbox"></div>
+        <div class="campaign-name-cell">
+          <span class="campaign-name">Six Month Reminder</span>
+          <span class="campaign-meta">Email, WhatsApp &middot; 10 Jan 2026</span>
+        </div>
+        <div class="campaign-status-col">
+          <span class="status-badge sent"><span class="dot"></span> Sent</span>
+        </div>
+      </div>
+      <div class="campaign-row" onclick="selectCampaign(this, 'oneoff')">
+        <div class="campaign-checkbox"></div>
+        <div class="campaign-name-cell">
+          <span class="campaign-name">2-for-1 Entr&eacute;e Extravaganza</span>
+          <span class="campaign-meta">Email &middot; 5 Jan 2026</span>
+        </div>
+        <div class="campaign-status-col">
+          <span class="status-badge sent"><span class="dot"></span> Sent</span>
+        </div>
+      </div>
+      <div class="campaign-row" onclick="selectCampaign(this, 'oneoff')">
+        <div class="campaign-checkbox"></div>
+        <div class="campaign-name-cell">
+          <span class="campaign-name">Anniversary Special</span>
+          <span class="campaign-meta">Email, WhatsApp &middot; 1 Jan 2026</span>
+        </div>
+        <div class="campaign-status-col">
+          <span class="status-badge draft"><span class="dot"></span> Draft</span>
+        </div>
+      </div>
+    </div>
+    <div class="campaign-pagination">
+      <span>1-8 of 24 campaigns</span>
+      <div style="display:flex;gap:4px">
+        <button class="page-btn">&larr;</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">&rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Drawer -->
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <div class="drawer-header-top">
+        <div>
+          <div class="drawer-title" id="drawerTitle">Wings Wednesday — Feb Special</div>
+          <div class="drawer-status">
+            <span class="status-dot"></span>
+            <span id="drawerSubtitle">Sent on 4 Feb 2026</span>
+          </div>
+        </div>
+        <div class="drawer-actions">
+          <div class="kebab-wrap">
+            <button title="More actions" onclick="toggleKebab()" id="kebabBtn">&#8942;</button>
+            <div class="kebab-menu" id="kebabMenu">
+              <div class="kebab-menu-item">Duplicate</div>
+              <div class="kebab-menu-item danger">Delete</div>
+            </div>
+          </div>
+          <button title="Expand" id="expandBtn">&#8594;|</button>
+        </div>
+      </div>
+
+      <div class="view-tabs">
+        <div class="view-tab active" onclick="switchTab('overview', this)">Overview</div>
+        <div class="view-tab" onclick="switchTab('preview', this)">Email preview</div>
+        <div class="view-tab" onclick="switchTab('recipients', this)">Recipients</div>
+      </div>
+    </div>
+
+    <div class="drawer-body">
+
+      <!-- ═══ TAB: Overview ═══ -->
+      <div class="tab-panel" id="tab-overview">
+
+        <!-- Send Performance -->
+        <div class="section-label">Send performance</div>
+        <div class="send-stats-grid">
+          <div class="send-stat-card">
+            <div class="send-stat-icon delivered">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m4.5 12.75 6 6 9-13.5"/></svg>
+            </div>
+            <div class="send-stat-label">Delivered</div>
+            <div class="send-stat-value">97.8%</div>
+            <div class="send-stat-sub">1,245 of 1,273</div>
+          </div>
+          <div class="send-stat-card">
+            <div class="send-stat-icon opened">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.75 9v.906a2.25 2.25 0 0 1-1.183 1.981l-6.478 3.488M2.25 9v.906a2.25 2.25 0 0 0 1.183 1.981l6.478 3.488"/></svg>
+            </div>
+            <div class="send-stat-label">Open rate</div>
+            <div class="send-stat-value">45.3%</div>
+            <div class="send-stat-sub">564 opens</div>
+          </div>
+          <div class="send-stat-card">
+            <div class="send-stat-icon clicked">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5"/></svg>
+            </div>
+            <div class="send-stat-label">Click rate</div>
+            <div class="send-stat-value">12.4%</div>
+            <div class="send-stat-sub">154 clicks</div>
+          </div>
+          <div class="send-stat-card">
+            <div class="send-stat-icon bounced">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/></svg>
+            </div>
+            <div class="send-stat-label">Bounce rate</div>
+            <div class="send-stat-value">2.2%</div>
+            <div class="send-stat-sub">28 bounced</div>
+          </div>
+        </div>
+
+        <!-- Attribution Results -->
+        <div class="section-label">Attribution results</div>
+
+        <!-- Automation time toggles (hidden by default) -->
+        <div class="time-toggles hidden" id="automationToggles">
+          <button class="time-toggle" onclick="setTimeRange(this, '7d')">7d</button>
+          <button class="time-toggle active" onclick="setTimeRange(this, '30d')">30d</button>
+          <button class="time-toggle" onclick="setTimeRange(this, '90d')">90d</button>
+          <button class="time-toggle" onclick="setTimeRange(this, 'all')">All time</button>
+        </div>
+
+        <div class="attribution-section" id="attributionContent">
+          <!-- Content injected by JS based on state -->
+        </div>
+
+      </div><!-- end tab-overview -->
+
+      <!-- ═══ TAB: Email Preview ═══ -->
+      <div class="tab-panel hidden" id="tab-preview">
+        <div class="email-preview-tab">
+          <div class="email-subject-field">
+            <div class="email-subject-label">Subject line</div>
+            <div class="email-subject-input">Wings Wednesday — They're Back</div>
+          </div>
+          <div class="email-body-preview">
+            <img class="email-hero-img" src="https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=600&h=300&fit=crop" alt="Crispy chicken wings">
+            <div class="email-body-content">
+              <p class="greeting">Hi [First Name],</p>
+              <p>Remember Wings Wednesday? It's back — and better than ever.</p>
+              <p>Every Wednesday this February, we're serving up our famous buffalo wings with a new Korean glaze option. Half-price wings from 5pm, plus $8 pints of craft beer on tap.</p>
+              <p>Last time we ran this, tables filled up by 6pm. Don't miss out.</p>
+              <a class="email-cta-btn">Book Wednesday &rarr;</a>
+              <p class="email-fine-print">You're receiving this because you've dined with us before. We only send emails worth reading.</p>
+            </div>
+          </div>
+        </div>
+      </div><!-- end tab-preview -->
+
+      <!-- ═══ TAB: Recipients ═══ -->
+      <div class="tab-panel hidden" id="tab-recipients">
+        <div class="recipients-header">
+          <div style="font-size:14px;font-weight:600;color:var(--text-primary)">1,245 Recipients</div>
+          <input type="text" class="recipients-search" placeholder="Search recipients...">
+        </div>
+        <div class="recipients-table">
+          <div class="recipients-table-header">
+            <span>Recipient</span>
+            <span class="sortable">Status</span>
+            <span>Clicked</span>
+            <span>Booked</span>
+          </div>
+          <div class="recipient-row">
+            <span class="recipient-name">Sarah Chen</span>
+            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
+            <span class="recipient-clicked yes">&#10003; Yes</span>
+            <span class="recipient-booked yes">&#10003; Booked</span>
+          </div>
+          <div class="recipient-row">
+            <span class="recipient-name">Marcus Thompson</span>
+            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
+            <span class="recipient-clicked no">&#10007; No</span>
+            <span class="recipient-booked yes">&#10003; Booked</span>
+          </div>
+          <div class="recipient-row">
+            <span class="recipient-name">Emma Williams</span>
+            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
+            <span class="recipient-clicked yes">&#10003; Yes</span>
+            <span class="recipient-booked no">&mdash;</span>
+          </div>
+          <div class="recipient-row">
+            <span class="recipient-name">James O'Brien</span>
+            <span class="recipient-status"><span class="dot delivered"></span> Delivered</span>
+            <span class="recipient-clicked no">&#10007; No</span>
+            <span class="recipient-booked no">&mdash;</span>
+          </div>
+          <div class="recipient-row">
+            <span class="recipient-name">Anika Patel</span>
+            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
+            <span class="recipient-clicked yes">&#10003; Yes</span>
+            <span class="recipient-booked yes">&#10003; Booked</span>
+          </div>
+          <div class="recipient-row">
+            <span class="recipient-name">Tom Nguyen</span>
+            <span class="recipient-status"><span class="dot bounced"></span> Bounced</span>
+            <span class="recipient-clicked no">&mdash;</span>
+            <span class="recipient-booked no">&mdash;</span>
+          </div>
+          <div class="recipient-row">
+            <span class="recipient-name">Lily Foster</span>
+            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
+            <span class="recipient-clicked no">&#10007; No</span>
+            <span class="recipient-booked yes">&#10003; Booked</span>
+          </div>
+          <div class="recipient-row">
+            <span class="recipient-name">David Kim</span>
+            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
+            <span class="recipient-clicked yes">&#10003; Yes</span>
+            <span class="recipient-booked no">&mdash;</span>
+          </div>
+          <div class="recipient-row">
+            <span class="recipient-name">Priya Sharma</span>
+            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
+            <span class="recipient-clicked no">&#10007; No</span>
+            <span class="recipient-booked no">&mdash;</span>
+          </div>
+          <div class="recipient-row">
+            <span class="recipient-name">Jack Morrison</span>
+            <span class="recipient-status"><span class="dot delivered"></span> Delivered</span>
+            <span class="recipient-clicked no">&#10007; No</span>
+            <span class="recipient-booked no">&mdash;</span>
+          </div>
+        </div>
+        <div class="recipients-pagination">
+          <div class="rows-per-page">
+            Rows per page:
+            <select><option>10</option><option>25</option><option>50</option></select>
+          </div>
+          <span>1-10 of 1,245</span>
+          <div class="page-controls">
+            <button class="page-btn">&larr;</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">...</button>
+            <button class="page-btn">125</button>
+            <button class="page-btn">&rarr;</button>
+          </div>
+        </div>
+      </div><!-- end tab-recipients -->
+
+    </div>
+  </div>
+</div>
+
+<!-- State Switcher -->
+<div class="state-switcher" id="stateSwitcher">
+  <h3>Prototype State Switcher</h3>
+
+  <div class="state-group">
+    <div class="state-group-title">One-off Campaign</div>
+    <label class="active-label"><input type="radio" name="state" value="closed-data" checked onchange="setState(this.value)"> Closed + data (complete)</label>
+    <label><input type="radio" name="state" value="closed-debrief" onchange="setState(this.value)"> Closed + debrief generated</label>
+    <label><input type="radio" name="state" value="closed-no-booking-system" onchange="setState(this.value)"> Closed + no booking system</label>
+    <label><input type="radio" name="state" value="closed-no-avg-spend" onchange="setState(this.value)"> Closed + no avg spend</label>
+    <label><input type="radio" name="state" value="closed-no-bookings" onchange="setState(this.value)"> Closed + no bookings</label>
+    <label><input type="radio" name="state" value="open-data" onchange="setState(this.value)"> Open + data (9/14 days)</label>
+    <label><input type="radio" name="state" value="open-no-data" onchange="setState(this.value)"> Open + no data yet</label>
+  </div>
+
+  <div class="state-group">
+    <div class="state-group-title">Automation</div>
+    <label><input type="radio" name="state" value="automation" onchange="setState(this.value)"> Automation view (time toggles)</label>
+  </div>
+
+  <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+    <label style="font-size:11px;color:var(--text-dim);cursor:pointer" onclick="toggleSwitcher()">Hide panel (press <kbd style="background:var(--bg-card);padding:1px 5px;border-radius:3px;border:1px solid var(--border)">S</kbd> to toggle)</label>
+  </div>
+</div>
+
+<script>
+// ── State Management ──
+let currentState = 'closed-data';
+let debriefGenerated = false;
+let campaignType = 'oneoff';
+
+function setState(state) {
+  currentState = state;
+  debriefGenerated = state === 'closed-debrief';
+  campaignType = state === 'automation' ? 'automation' : 'oneoff';
+
+  // Update active label
+  document.querySelectorAll('.state-switcher label').forEach(l => l.classList.remove('active-label'));
+  const checked = document.querySelector(`input[value="${state}"]`);
+  if (checked) checked.closest('label').classList.add('active-label');
+
+  // Show/hide automation toggles
+  document.getElementById('automationToggles').classList.toggle('hidden', state !== 'automation');
+
+  renderAttribution();
+  // Switch to overview tab
+  switchTab('overview', document.querySelector('.view-tab'));
+}
+
+function renderAttribution() {
+  const container = document.getElementById('attributionContent');
+  let html = '';
+
+  switch (currentState) {
+    case 'closed-data':
+      html = renderClosedWithData(false);
+      break;
+    case 'closed-debrief':
+      html = renderClosedWithData(true);
+      break;
+    case 'closed-no-booking-system':
+      html = renderNoBookingSystem();
+      break;
+    case 'closed-no-avg-spend':
+      html = renderNoAvgSpend();
+      break;
+    case 'closed-no-bookings':
+      html = renderNoBookings();
+      break;
+    case 'open-data':
+      html = renderOpenWithData();
+      break;
+    case 'open-no-data':
+      html = renderOpenNoData();
+      break;
+    case 'automation':
+      html = renderAutomation();
+      break;
+  }
+
+  container.innerHTML = html;
+}
+
+function renderProgressBar(complete, days) {
+  if (complete) {
+    return `
+      <div class="progress-indicator">
+        <div class="progress-check complete">&#10003;</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill complete"></div></div>
+        <div class="progress-text"><strong>14-day attribution window</strong> &middot; Complete</div>
+      </div>`;
+  }
+  const pct = Math.round((days / 14) * 100);
+  return `
+    <div class="progress-indicator">
+      <div class="progress-check partial" style="font-size:9px">${days}</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill partial" style="width:${pct}%"></div></div>
+      <div class="progress-text">Attribution window: <strong>${days} of 14 days</strong> elapsed &middot; Results still accumulating</div>
+    </div>`;
+}
+
+function renderMetricCards(bookings, convRate, covers, revenue, revPerEmail) {
+  return `
+    <div class="attr-metrics-grid">
+      <div class="attr-metric-card">
+        <div class="attr-metric-value">${bookings}</div>
+        <div class="attr-metric-label">Bookings</div>
+      </div>
+      <div class="attr-metric-card">
+        <div class="attr-metric-value">${convRate}</div>
+        <div class="attr-metric-label">Booking conversions</div>
+      </div>
+      <div class="attr-metric-card">
+        <div class="attr-metric-value">${covers}</div>
+        <div class="attr-metric-label">Covers</div>
+      </div>
+    </div>
+    <div class="attr-metrics-row-2">
+      <div class="attr-metric-card">
+        <div class="attr-metric-value" style="color:var(--green)">${revenue}</div>
+        <div class="attr-metric-label">Est. Revenue</div>
+        <div class="attr-metric-sub">Based on avg. spend per cover</div>
+      </div>
+      <div class="attr-metric-card">
+        <div class="attr-metric-value" style="color:var(--blue)">${revPerEmail}</div>
+        <div class="attr-metric-label">Revenue per email</div>
+      </div>
+    </div>`;
+}
+
+function renderClosedWithData(withDebrief) {
+  let html = renderProgressBar(true);
+  html += renderMetricCards('23', '1.84%', '67', '$4,280.00', '$3.40');
+
+  if (withDebrief) {
+    html += renderDebriefCard();
+  } else {
+    html += `
+      <button class="generate-debrief-btn" id="generateBtn" onclick="generateDebrief()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/></svg>
+        Generate Campaign Debrief
+      </button>`;
+  }
+  return html;
+}
+
+function renderDebriefCard() {
+  return `
+    <div class="debrief-card">
+      <div class="debrief-header">
+        <div class="debrief-header-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/></svg>
+          AI Campaign Debrief
+        </div>
+        <div class="debrief-actions">
+          <button class="debrief-btn" onclick="generateDebrief()">&#8635; Refresh</button>
+          <button class="debrief-btn">Analyze</button>
+        </div>
+      </div>
+      <div class="debrief-body">
+        <div class="debrief-headline">Strong performer</div>
+        <div class="debrief-summary">
+          This campaign reached 1,245 regulars with a 45.3% open rate — well above your venue average of 28%. The single, clear CTA ("Book Wednesday") and urgency framing drove 23 bookings from 67 covers, your second-best result this quarter.
+        </div>
+
+        <div class="debrief-metrics-row">
+          <div class="debrief-metric-item">
+            <div class="debrief-metric-val">23</div>
+            <div class="debrief-metric-lbl">Bookings</div>
+          </div>
+          <div class="debrief-metric-item">
+            <div class="debrief-metric-val">67</div>
+            <div class="debrief-metric-lbl">Covers</div>
+          </div>
+          <div class="debrief-metric-item">
+            <div class="debrief-metric-val">$4,280</div>
+            <div class="debrief-metric-lbl">Revenue</div>
+          </div>
+        </div>
+
+        <div class="debrief-section">
+          <div class="debrief-section-label">What worked</div>
+          <div class="debrief-section-text">
+            Subject line "Wings Wednesday — They're Back" had a 45.3% open rate vs your 28% average — the casual, specific tone resonated with your regulars. Single CTA focus ("Book Wednesday") outperformed your last newsletter which had 4 CTAs and only 3.1% booking conversion.
+          </div>
+        </div>
+
+        <div class="debrief-section">
+          <div class="debrief-section-label">Recommendation</div>
+          <div class="debrief-section-text">
+            The 541 openers who didn't book are warm leads — try a Tuesday reminder to this segment with a smaller incentive like a complimentary side. Your lapsed-60-day segment hasn't received a Wings Wednesday campaign yet — they could be your biggest untapped opportunity.
+          </div>
+        </div>
+
+        <div class="debrief-footer" id="debriefFooter" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
+          <span>More data is still coming in. Try again in 5 days for better insights.</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderNoBookingSystem() {
+  let html = renderProgressBar(true);
+  html += `
+    <div class="empty-state">
+      <div class="empty-state-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/></svg>
+      </div>
+      <div class="empty-state-title">Connect your booking system</div>
+      <div class="empty-state-text">Connect your booking system to see which campaigns drive reservations.</div>
+      <a class="empty-state-link">Set up &rarr;</a>
+    </div>`;
+  return html;
+}
+
+function renderNoAvgSpend() {
+  let html = renderProgressBar(true);
+  html += `
+    <div class="attr-metrics-grid">
+      <div class="attr-metric-card">
+        <div class="attr-metric-value">23</div>
+        <div class="attr-metric-label">Bookings</div>
+      </div>
+      <div class="attr-metric-card">
+        <div class="attr-metric-value">1.84%</div>
+        <div class="attr-metric-label">Booking conversions</div>
+      </div>
+      <div class="attr-metric-card">
+        <div class="attr-metric-value">67</div>
+        <div class="attr-metric-label">Covers</div>
+      </div>
+    </div>
+    <div class="attr-metrics-row-2">
+      <div class="upsell-metric-card" style="grid-column: span 2">
+        <div style="margin-bottom:4px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5"><path d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+        </div>
+        <div class="upsell-metric-text">Add your estimated average spend per cover to see revenue attribution for your campaigns.</div>
+        <a class="upsell-metric-link">Add in Settings &rarr;</a>
+      </div>
+    </div>`;
+  html += `
+    <button class="generate-debrief-btn" onclick="generateDebrief()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/></svg>
+      Generate Campaign Debrief
+    </button>`;
+  return html;
+}
+
+function renderNoBookings() {
+  let html = renderProgressBar(true);
+  html += `
+    <div class="empty-state">
+      <div class="empty-state-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5"><path d="M3 3l18 18M10.5 10.677a2 2 0 0 0 2.823 2.823M7.362 7.561C5.68 8.74 4.279 10.42 3 12c1.889 2.991 5.282 6 9 6 1.55 0 3.043-.523 4.395-1.35M12 6c3.718 0 7.111 3.009 9 6-.947 1.497-2.2 2.93-3.6 4.04"/></svg>
+      </div>
+      <div class="empty-state-title">No bookings attributed</div>
+      <div class="empty-state-text">No bookings were attributed to this campaign within the 14-day attribution window.</div>
+    </div>`;
+  return html;
+}
+
+function renderOpenWithData() {
+  let html = renderProgressBar(false, 9);
+  html += renderMetricCards('14', '1.12%', '38', '$2,432.00', '$1.95');
+  html += `
+    <button class="generate-debrief-btn" onclick="generateDebrief()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/></svg>
+      Generate Campaign Debrief
+    </button>`;
+  return html;
+}
+
+function renderOpenNoData() {
+  let html = renderProgressBar(false, 3);
+  html += `
+    <div class="empty-state">
+      <div class="empty-state-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5"><path d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+      </div>
+      <div class="empty-state-title">Waiting for data</div>
+      <div class="empty-state-text">Attribution data will appear here as customers book after receiving this campaign.</div>
+    </div>`;
+  return html;
+}
+
+function renderAutomation() {
+  // No progress bar for automations
+  let html = renderMetricCards('89', '2.41%', '247', '$15,808.00', '$4.28');
+  html += `
+    <button class="generate-debrief-btn" onclick="generateDebrief()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/></svg>
+      Generate Campaign Debrief
+    </button>`;
+  return html;
+}
+
+// ── Interactions ──
+
+function switchTab(tabId, el) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+  document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.remove('hidden');
+  el.classList.add('active');
+}
+
+function generateDebrief() {
+  const btn = document.getElementById('generateBtn');
+  if (btn) {
+    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182"/></svg> Analysing campaign performance...</span>';
+    btn.disabled = true;
+  }
+
+  // Add spinner animation
+  if (!document.getElementById('spinStyle')) {
+    const style = document.createElement('style');
+    style.id = 'spinStyle';
+    style.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
+    document.head.appendChild(style);
+  }
+
+  setTimeout(() => {
+    debriefGenerated = true;
+
+    // Determine if we show the footer note (open window)
+    const isOpen = currentState === 'open-data';
+
+    // Re-render with debrief
+    const container = document.getElementById('attributionContent');
+    let html = '';
+
+    if (currentState === 'open-data') {
+      html = renderProgressBar(false, 9);
+      html += renderMetricCards('14', '1.12%', '38', '$2,432.00', '$1.95');
+    } else if (currentState === 'automation') {
+      html += renderMetricCards('89', '2.41%', '247', '$15,808.00', '$4.28');
+    } else if (currentState === 'closed-no-avg-spend') {
+      html = renderProgressBar(true);
+      html += `
+        <div class="attr-metrics-grid">
+          <div class="attr-metric-card"><div class="attr-metric-value">23</div><div class="attr-metric-label">Bookings</div></div>
+          <div class="attr-metric-card"><div class="attr-metric-value">1.84%</div><div class="attr-metric-label">Booking conversions</div></div>
+          <div class="attr-metric-card"><div class="attr-metric-value">67</div><div class="attr-metric-label">Covers</div></div>
+        </div>
+        <div class="attr-metrics-row-2">
+          <div class="upsell-metric-card" style="grid-column: span 2">
+            <div style="margin-bottom:4px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5"><path d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg></div>
+            <div class="upsell-metric-text">Add your estimated average spend per cover to see revenue attribution for your campaigns.</div>
+            <a class="upsell-metric-link">Add in Settings &rarr;</a>
+          </div>
+        </div>`;
+    } else {
+      html = renderProgressBar(true);
+      html += renderMetricCards('23', '1.84%', '67', '$4,280.00', '$3.40');
+    }
+
+    html += renderDebriefCard();
+    container.innerHTML = html;
+
+    // Show/hide footer based on open window
+    const footer = document.getElementById('debriefFooter');
+    if (footer && isOpen) {
+      footer.style.display = 'flex';
+    }
+
+    // Show toast
+    showToast();
+
+    // Scroll to debrief
+    const card = container.querySelector('.debrief-card');
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 2000);
+}
+
+function selectCampaign(row, type) {
+  document.querySelectorAll('.campaign-row').forEach(r => r.classList.remove('active'));
+  row.classList.add('active');
+  campaignType = type;
+
+  if (type === 'automation') {
+    document.getElementById('drawerTitle').textContent = 'Post-Dining Feedback';
+    document.getElementById('drawerSubtitle').textContent = 'Automation · Active since 1 Dec 2025';
+    setState('automation');
+  }
+}
+
+function toggleKebab() {
+  document.getElementById('kebabMenu').classList.toggle('show');
+}
+
+// Close kebab on outside click
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.kebab-wrap')) {
+    document.getElementById('kebabMenu').classList.remove('show');
+  }
+});
+
+function setTimeRange(btn, range) {
+  document.querySelectorAll('.time-toggle').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // In a real app, this would fetch new data. For prototype, just visual.
+}
+
+function showToast() {
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 5000);
+}
+
+function hideToast() {
+  document.getElementById('toast').classList.remove('show');
+}
+
+// ── State Switcher Toggle ──
+function toggleSwitcher() {
+  const sw = document.getElementById('stateSwitcher');
+  sw.classList.toggle('hidden');
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 's' && !e.ctrlKey && !e.metaKey && e.target.tagName !== 'INPUT') {
+    toggleSwitcher();
+  }
+});
+
+// ── Init ──
+renderAttribution();
+</script>
+
+</body>
+</html>
