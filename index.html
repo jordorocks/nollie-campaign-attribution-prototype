@@ -32,93 +32,110 @@
     --pink: #ec4899;
   }
 
+  html, body { height: 100%; }
+
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg-primary);
     color: var(--text-secondary);
-    min-height: 100vh;
     display: flex;
-    padding-top: 30px;
+    flex-direction: column;
   }
 
   /* ── Prototype Banner ── */
   .prototype-banner {
-    position: fixed;
-    top: 0; left: 0; right: 0;
     background: var(--purple);
     color: var(--bg-primary);
     text-align: center;
-    padding: 6px;
-    font-size: 11px;
+    padding: 5px;
+    font-size: 10px;
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
-    z-index: 100;
+    flex-shrink: 0;
   }
 
-  /* ── State Switcher ── */
-  .state-switcher {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+  /* ── Top Nav ── */
+  .top-nav {
+    height: 56px;
     background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    z-index: 200;
-    width: 300px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    max-height: 80vh;
-    overflow-y: auto;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 16px;
+    flex-shrink: 0;
   }
-  .state-switcher h3 {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--purple);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-  }
-  .state-switcher label {
+  .top-nav-logo {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 5px 0;
-    font-size: 12px;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: color 0.15s;
-  }
-  .state-switcher label:hover { color: var(--text-primary); }
-  .state-switcher label.active-label { color: var(--purple); font-weight: 500; }
-  .state-switcher input[type="radio"] { accent-color: var(--purple); }
-  .state-group { margin-bottom: 14px; }
-  .state-group-title {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid var(--border);
-  }
-  .switcher-toggle {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 40px; height: 40px;
-    background: var(--purple-deep);
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-    z-index: 201;
-    display: none;
-    align-items: center;
+    flex-shrink: 0;
+    min-width: 72px;
     justify-content: center;
-    box-shadow: 0 4px 16px rgba(124,58,237,0.4);
+  }
+  .top-nav-logo .n-mark {
+    width: 28px; height: 28px;
+    background: var(--purple);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 14px; font-weight: 700;
+  }
+  .top-nav-logo .wordmark {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+  }
+  .top-nav-search {
+    flex: 1;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .top-nav-search input {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px 8px 36px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+  }
+  .top-nav-search input::placeholder { color: var(--text-dim); }
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .nav-icon-btn {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 6px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+    background: none; border: none;
+  }
+  .nav-icon-btn:hover { background: var(--bg-card); color: var(--text-muted); }
+  .nav-icon-btn svg { width: 18px; height: 18px; }
+  .user-avatar {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--green);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 12px; font-weight: 600;
+    cursor: pointer;
+  }
+  .nav-chevron { color: var(--text-dim); font-size: 12px; cursor: pointer; }
+
+  /* ── App Shell ── */
+  .app-shell {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
   }
 
   /* ── Sidebar ── */
@@ -129,17 +146,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 16px 0;
-    gap: 4px;
+    padding: 12px 0;
+    gap: 2px;
     flex-shrink: 0;
-  }
-  .sidebar-logo {
-    width: 36px; height: 36px;
-    background: var(--purple);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    color: white; font-size: 16px; font-weight: 700;
-    margin-bottom: 24px;
   }
   .sidebar-item {
     width: 56px; height: 52px;
@@ -150,12 +159,12 @@
     gap: 3px;
     cursor: pointer;
     transition: all 0.15s;
+    text-decoration: none;
   }
   .sidebar-item:hover { background: var(--bg-card); color: var(--text-muted); }
   .sidebar-item.active { background: var(--bg-card); color: var(--purple); }
   .sidebar-item svg { width: 20px; height: 20px; }
   .sidebar-spacer { flex: 1; }
-  .sidebar-item.support { margin-top: auto; }
 
   /* ── Main Content ── */
   .main-content {
@@ -166,92 +175,67 @@
 
   /* ── Campaign List Panel ── */
   .campaign-list {
-    width: 380px;
-    min-width: 380px;
+    width: 340px;
+    min-width: 340px;
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     background: var(--bg-primary);
   }
   .campaign-list-header {
-    padding: 20px 20px 14px;
+    padding: 20px 16px 12px;
   }
   .campaign-list-header h1 {
     font-size: 20px;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   .campaign-search {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-  .search-input-wrap {
-    flex: 1;
     position: relative;
   }
-  .search-input-wrap svg {
+  .campaign-search svg {
     position: absolute;
-    left: 10px;
-    top: 50%;
+    left: 12px; top: 50%;
     transform: translateY(-50%);
     width: 14px; height: 14px;
     color: var(--text-dim);
   }
-  .search-input-wrap input {
+  .campaign-search input {
     width: 100%;
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 7px 10px 7px 32px;
+    padding: 8px 12px 8px 34px;
     color: var(--text-secondary);
     font-size: 13px;
     outline: none;
     font-family: inherit;
   }
-  .search-input-wrap input:focus { border-color: var(--purple); }
-  .search-input-wrap input::placeholder { color: var(--text-dim); }
-  .sort-btn, .filter-btn {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 7px 12px;
-    color: var(--text-muted);
-    font-size: 12px;
-    cursor: pointer;
-    white-space: nowrap;
-    font-family: inherit;
-    transition: border-color 0.15s;
-  }
-  .sort-btn:hover, .filter-btn:hover { border-color: var(--text-dim); }
+  .campaign-search input::placeholder { color: var(--text-dim); }
 
-  /* Campaign table */
   .campaign-table-header {
-    display: grid;
-    grid-template-columns: 28px 1fr 80px;
-    padding: 8px 20px;
+    display: flex;
+    padding: 8px 16px;
     font-size: 11px;
     font-weight: 500;
     color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
     border-bottom: 1px solid var(--border);
     align-items: center;
   }
-  .campaign-table {
-    flex: 1;
-    overflow-y: auto;
-  }
+  .campaign-table-header .ch-check { width: 28px; flex-shrink: 0; }
+  .campaign-table-header .ch-name { flex: 1; }
+
+  .campaign-table { flex: 1; overflow-y: auto; }
+
   .campaign-row {
-    display: grid;
-    grid-template-columns: 28px 1fr 80px;
-    padding: 12px 20px;
-    font-size: 13px;
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
     border-bottom: 1px solid var(--border-light);
     cursor: pointer;
     transition: background 0.1s;
-    align-items: center;
+    gap: 0;
   }
   .campaign-row:hover { background: var(--bg-hover); }
   .campaign-row.active { background: var(--bg-card); }
@@ -260,54 +244,17 @@
     width: 16px; height: 16px;
     border: 1.5px solid var(--border);
     border-radius: 4px;
-    cursor: pointer;
-    background: transparent;
-    transition: all 0.15s;
-  }
-  .campaign-checkbox:hover { border-color: var(--text-dim); }
-  .campaign-name-cell {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
+    flex-shrink: 0;
+    margin-right: 12px;
   }
   .campaign-name {
     color: var(--text-secondary);
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 400;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-  .campaign-meta {
-    font-size: 11px;
-    color: var(--text-dim);
-  }
-  .campaign-status-col {
-    text-align: right;
-    font-size: 11px;
-  }
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 11px;
-    font-weight: 500;
-  }
-  .status-badge.sent { color: var(--green); }
-  .status-badge.draft { color: var(--text-dim); }
-  .status-badge .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: currentColor;
-  }
-  .campaign-pagination {
-    padding: 10px 20px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 11px;
-    color: var(--text-dim);
+    flex: 1;
   }
 
   /* ── Detail Drawer ── */
@@ -348,40 +295,42 @@
   }
   .drawer-actions {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
   }
-  .drawer-actions button {
+  .icon-btn {
     background: none;
-    border: 1px solid var(--border);
-    border-radius: 6px;
+    border: none;
     color: var(--text-dim);
-    width: 32px; height: 32px;
+    width: 28px; height: 28px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
+    border-radius: 6px;
     transition: all 0.15s;
-    font-family: inherit;
+    font-size: 18px;
   }
-  .drawer-actions button:hover { border-color: var(--text-dim); color: var(--text-muted); }
+  .icon-btn:hover { background: var(--bg-card); color: var(--text-muted); }
+  .icon-btn svg { width: 18px; height: 18px; }
 
   /* Kebab dropdown */
   .kebab-wrap { position: relative; }
   .kebab-menu {
     display: none;
     position: absolute;
-    top: 38px;
-    right: 0;
+    top: 34px; right: 0;
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 4px;
-    min-width: 140px;
+    border-radius: 10px;
+    padding: 6px;
+    min-width: 160px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.4);
     z-index: 20;
   }
   .kebab-menu.show { display: block; }
   .kebab-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     padding: 8px 12px;
     font-size: 13px;
     color: var(--text-muted);
@@ -392,6 +341,7 @@
   .kebab-menu-item:hover { background: var(--bg-hover); color: var(--text-secondary); }
   .kebab-menu-item.danger { color: var(--red); }
   .kebab-menu-item.danger:hover { background: rgba(239,68,68,0.1); }
+  .kebab-menu-item svg { width: 16px; height: 16px; }
 
   /* Tabs */
   .view-tabs {
@@ -410,31 +360,59 @@
     transition: all 0.15s;
   }
   .view-tab:hover { color: var(--text-muted); }
-  .view-tab.active { color: var(--purple); border-bottom-color: var(--purple); }
+  .view-tab.active { color: var(--text-primary); border-bottom-color: var(--text-primary); }
 
-  .drawer-body {
-    padding: 20px 24px 40px;
+  .drawer-body { padding: 0 24px 40px; }
+
+  /* ── Meta Section ── */
+  .meta-section { padding: 16px 0; }
+  .meta-row {
+    display: flex;
+    padding: 4px 0;
+    font-size: 13px;
+  }
+  .meta-label { width: 120px; color: var(--text-dim); flex-shrink: 0; }
+  .meta-value { color: var(--text-secondary); }
+
+  /* ── Section Header with Time Toggles ── */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 12px;
+  }
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .time-toggles {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .time-toggle {
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-dim);
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .time-toggle:last-child { border-right: none; }
+  .time-toggle:hover { color: var(--text-muted); }
+  .time-toggle.active {
+    background: var(--bg-card);
+    color: var(--text-primary);
   }
 
   /* ── Send Performance Cards ── */
-  .section-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 24px 0 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
   .send-stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -446,51 +424,56 @@
     border-radius: 10px;
     padding: 14px;
   }
-  .send-stat-icon {
-    width: 28px; height: 28px;
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 8px;
-    font-size: 13px;
+  .send-stat-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
   }
-  .send-stat-icon.delivered { background: rgba(34,197,94,0.12); color: var(--green); }
-  .send-stat-icon.opened { background: rgba(59,130,246,0.12); color: var(--blue); }
-  .send-stat-icon.clicked { background: rgba(192,132,252,0.12); color: var(--purple); }
-  .send-stat-icon.bounced { background: rgba(239,68,68,0.12); color: var(--red); }
-  .send-stat-label {
-    font-size: 11px;
+  .send-stat-icon {
     color: var(--text-dim);
-    font-weight: 500;
-    margin-bottom: 4px;
+  }
+  .send-stat-icon svg { width: 14px; height: 14px; }
+  .send-stat-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 400;
   }
   .send-stat-value {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1.2;
   }
   .send-stat-sub {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-dim);
     margin-top: 2px;
   }
 
   /* ── Attribution Results ── */
-  .attribution-section {
-    margin-top: 12px;
-  }
+  .attribution-section { margin-top: 0; }
 
   /* Progress bar */
   .progress-indicator {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     padding: 10px 14px;
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 10px;
   }
+  .progress-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 11px;
+  }
+  .progress-icon.complete { background: var(--green); color: white; }
+  .progress-icon.partial { background: var(--blue); color: white; font-size: 9px; font-weight: 600; }
   .progress-bar-wrap {
     flex: 1;
     height: 6px;
@@ -505,21 +488,12 @@
   }
   .progress-bar-fill.complete { background: var(--green); width: 100%; }
   .progress-bar-fill.partial { background: var(--blue); }
-  .progress-check {
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px;
-    flex-shrink: 0;
-  }
-  .progress-check.complete { background: var(--green); color: white; }
-  .progress-check.partial { background: var(--blue); color: white; }
   .progress-text {
     font-size: 12px;
     color: var(--text-muted);
+    white-space: nowrap;
     flex-shrink: 0;
   }
-  .progress-text strong { color: var(--text-secondary); font-weight: 600; }
 
   /* Metric cards */
   .attr-metrics-grid {
@@ -527,17 +501,16 @@
     grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
   }
-  .attr-metrics-row-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 10px;
-  }
   .attr-metric-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 16px;
+  }
+  .attr-metric-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
   }
   .attr-metric-value {
     font-size: 24px;
@@ -545,79 +518,82 @@
     color: var(--text-primary);
     line-height: 1.2;
   }
-  .attr-metric-label {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 2px;
-  }
   .attr-metric-sub {
     font-size: 11px;
     color: var(--text-dim);
-    margin-top: 1px;
+    margin-top: 2px;
+  }
+
+  /* Revenue row — horizontal layout matching Figma */
+  .attr-revenue-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .attr-revenue-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .attr-revenue-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+  .attr-revenue-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-left: auto;
+  }
+  .attr-revenue-sub {
+    font-size: 11px;
+    color: var(--text-dim);
   }
 
   /* ── Empty/Upsell States ── */
-  .empty-state {
+  .empty-state-card {
     background: var(--bg-card);
-    border: 1px dashed var(--border);
-    border-radius: 12px;
-    padding: 32px 24px;
-    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
     margin-top: 12px;
   }
-  .empty-state-icon {
-    font-size: 32px;
-    margin-bottom: 12px;
-    opacity: 0.6;
+  .empty-state-illustration {
+    width: 56px; height: 56px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 12px;
+    background: rgba(59,130,246,0.08);
   }
-  .empty-state-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin-bottom: 6px;
-  }
+  .empty-state-illustration svg { width: 28px; height: 28px; color: var(--blue); opacity: 0.6; }
+  .empty-state-content { flex: 1; }
   .empty-state-text {
     font-size: 13px;
-    color: var(--text-dim);
+    color: var(--text-muted);
     line-height: 1.5;
-    max-width: 360px;
-    margin: 0 auto;
   }
   .empty-state-link {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    margin-top: 14px;
+    gap: 2px;
+    margin-top: 4px;
     font-size: 13px;
     font-weight: 500;
-    color: var(--indigo);
+    color: var(--purple);
     text-decoration: none;
     cursor: pointer;
   }
   .empty-state-link:hover { text-decoration: underline; }
-
-  /* Partial metrics (no avg spend) */
-  .upsell-metric-card {
-    background: var(--bg-card);
-    border: 1px dashed var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    text-align: center;
-  }
-  .upsell-metric-text {
-    font-size: 12px;
-    color: var(--text-dim);
-    line-height: 1.4;
-  }
-  .upsell-metric-link {
-    display: inline-block;
-    margin-top: 6px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--indigo);
-    text-decoration: none;
-    cursor: pointer;
-  }
 
   /* ── Generate Debrief Button ── */
   .generate-debrief-btn {
@@ -625,7 +601,7 @@
     margin-top: 20px;
     padding: 12px 20px;
     background: linear-gradient(135deg, var(--purple-deep), #6d28d9);
-    border: none;
+    border: 1px solid rgba(124,58,237,0.5);
     border-radius: 10px;
     color: #fff;
     font-size: 13px;
@@ -636,7 +612,6 @@
     justify-content: center;
     gap: 8px;
     transition: all 0.2s;
-    letter-spacing: 0.2px;
     font-family: inherit;
   }
   .generate-debrief-btn:hover {
@@ -645,11 +620,9 @@
     box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);
   }
   .generate-debrief-btn:disabled {
-    opacity: 0.7;
-    cursor: default;
-    transform: none;
-    box-shadow: none;
+    opacity: 0.7; cursor: default; transform: none; box-shadow: none;
   }
+  .generate-debrief-btn svg { width: 16px; height: 16px; }
 
   /* ── AI Debrief Card ── */
   .debrief-card {
@@ -665,42 +638,36 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--border);
   }
   .debrief-header-left {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
-    color: var(--purple-light);
+    color: var(--text-primary);
   }
-  .debrief-header-left svg { width: 16px; height: 16px; }
-  .debrief-actions {
-    display: flex;
-    gap: 6px;
-  }
-  .debrief-btn {
-    background: rgba(124,58,237,0.15);
-    border: 1px solid rgba(124,58,237,0.25);
-    border-radius: 6px;
-    color: var(--purple-dark);
-    font-size: 12px;
+  .debrief-header-left svg { width: 18px; height: 18px; color: var(--purple-light); }
+  .analyze-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 13px;
     font-weight: 500;
-    padding: 5px 12px;
+    padding: 6px 14px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
     transition: all 0.15s;
     font-family: inherit;
   }
-  .debrief-btn:hover { background: rgba(124,58,237,0.25); }
-  .debrief-body {
-    padding: 18px;
-  }
+  .analyze-btn:hover { border-color: var(--text-dim); color: var(--text-secondary); }
+  .analyze-btn svg { width: 14px; height: 14px; }
+  .debrief-body { padding: 0 18px 18px; }
   .debrief-headline {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 8px;
@@ -713,43 +680,31 @@
   }
   .debrief-metrics-row {
     display: flex;
-    gap: 0;
+    align-items: center;
+    gap: 16px;
     background: rgba(34,197,94,0.06);
+    border: 1px solid rgba(34,197,94,0.12);
     border-radius: 8px;
-    padding: 10px 0;
+    padding: 8px 16px;
     margin-bottom: 18px;
-    overflow: hidden;
   }
-  .debrief-metric-item {
-    flex: 1;
-    text-align: center;
-    padding: 2px 12px;
+  .debrief-metric-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
   }
-  .debrief-metric-item + .debrief-metric-item {
-    border-left: 1px solid var(--border);
-  }
-  .debrief-metric-val {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--green);
-  }
-  .debrief-metric-lbl {
-    font-size: 10px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 1px;
-  }
+  .debrief-metric-badge svg { width: 14px; height: 14px; color: var(--green); }
+  .debrief-metric-badge .label { color: var(--text-muted); }
+  .debrief-metric-badge .val { font-weight: 700; color: var(--text-primary); }
   .debrief-section {
     margin-bottom: 14px;
   }
   .debrief-section-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--purple-dark);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
   }
   .debrief-section-text {
     font-size: 13px;
@@ -758,29 +713,19 @@
   }
   .debrief-footer {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 6px;
     margin-top: 16px;
     padding-top: 14px;
     border-top: 1px solid var(--border);
     font-size: 12px;
     color: var(--text-dim);
+    line-height: 1.4;
   }
-  .debrief-footer svg { width: 14px; height: 14px; flex-shrink: 0; color: var(--text-dim); }
+  .debrief-footer svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
 
   /* ── Email Preview Tab ── */
-  .email-preview-tab { margin-top: 16px; }
-  .email-subject-field {
-    margin-bottom: 12px;
-  }
-  .email-subject-label {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-  }
+  .email-preview-tab { padding-top: 16px; }
   .email-subject-input {
     width: 100%;
     background: var(--bg-card);
@@ -790,63 +735,54 @@
     font-size: 13px;
     color: var(--text-secondary);
     font-family: inherit;
+    margin-bottom: 12px;
   }
-  .email-body-preview {
-    background: #ffffff;
+  .email-body-dark {
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid var(--border);
   }
   .email-hero-img {
     width: 100%;
     height: 200px;
     object-fit: cover;
     display: block;
+    border-radius: 8px 8px 0 0;
   }
   .email-body-content {
-    padding: 24px;
+    padding: 20px 0;
     font-size: 14px;
-    line-height: 1.6;
-    color: #333;
+    line-height: 1.7;
+    color: var(--text-muted);
   }
   .email-body-content p { margin-bottom: 14px; }
-  .email-body-content .greeting { font-size: 16px; font-weight: 600; color: #111; }
-  .email-cta-btn {
-    display: inline-block;
-    background: var(--purple-deep);
-    color: white;
-    padding: 12px 28px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    margin: 10px 0 20px;
-  }
-  .email-fine-print {
-    font-size: 11px;
-    color: #999;
-    margin-top: 16px;
-  }
+  .email-body-content .greeting { font-weight: 500; color: var(--text-secondary); }
 
   /* ── Recipients Tab ── */
-  .recipients-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 16px 0 12px;
+  .recipients-search-wrap {
+    padding: 16px 0 12px;
+    position: relative;
+  }
+  .recipients-search-wrap svg {
+    position: absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    width: 14px; height: 14px;
+    color: var(--text-dim);
+    margin-top: 2px;
   }
   .recipients-search {
+    width: 100%;
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 7px 12px;
+    padding: 8px 12px 8px 34px;
     color: var(--text-secondary);
-    font-size: 12px;
+    font-size: 13px;
     outline: none;
-    width: 200px;
     font-family: inherit;
   }
   .recipients-search::placeholder { color: var(--text-dim); }
+
   .recipients-table {
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -854,21 +790,19 @@
   }
   .recipients-table-header {
     display: grid;
-    grid-template-columns: 1fr 100px 80px 90px;
+    grid-template-columns: 1fr 110px 80px 90px;
     padding: 10px 16px;
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    background: var(--bg-hover);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--bg-card);
     border-bottom: 1px solid var(--border);
   }
-  .recipients-table-header span { cursor: pointer; }
-  .recipients-table-header .sortable::after { content: ' ↓'; font-size: 9px; }
+  .sortable { cursor: pointer; }
+  .sortable::after { content: ' \2193'; font-size: 10px; color: var(--text-dim); }
   .recipient-row {
     display: grid;
-    grid-template-columns: 1fr 100px 80px 90px;
+    grid-template-columns: 1fr 110px 80px 90px;
     padding: 11px 16px;
     font-size: 13px;
     border-bottom: 1px solid var(--border-light);
@@ -879,167 +813,160 @@
   .recipient-status {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 12px;
+    gap: 6px;
+    font-size: 13px;
   }
-  .recipient-status .dot { width: 7px; height: 7px; border-radius: 50%; }
-  .recipient-status .dot.opened { background: var(--green); }
-  .recipient-status .dot.delivered { background: var(--blue); }
-  .recipient-status .dot.bounced { background: var(--red); }
-  .recipient-clicked { font-size: 12px; }
-  .recipient-clicked.yes { color: var(--green); }
-  .recipient-clicked.no { color: var(--text-dim); }
-  .recipient-booked { font-size: 12px; font-weight: 500; }
-  .recipient-booked.yes { color: var(--green); }
-  .recipient-booked.no { color: var(--text-dim); }
+  .rdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .rdot.opened { background: var(--green); }
+  .rdot.delivered { background: var(--blue); }
+  .rdot.bounced { background: var(--red); }
+  .r-check { color: var(--green); }
+  .r-x { color: var(--red); }
+  .r-dash { color: var(--text-dim); }
 
   .recipients-pagination {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 12px;
+    padding: 10px 0;
     font-size: 12px;
     color: var(--text-dim);
   }
-  .recipients-pagination .page-controls {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+  .page-controls {
+    display: flex; align-items: center; gap: 2px;
   }
   .page-btn {
-    padding: 4px 10px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 4px;
+    min-width: 28px; height: 28px;
+    padding: 0 6px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
     color: var(--text-dim);
-    font-size: 11px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s;
-  }
-  .page-btn:hover { border-color: var(--text-dim); color: var(--text-muted); }
-  .page-btn.active { background: var(--purple-deep); border-color: var(--purple-deep); color: white; }
-  .rows-per-page {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .rows-per-page select {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    color: var(--text-muted);
-    font-size: 11px;
-    padding: 3px 6px;
-    font-family: inherit;
-  }
-
-  /* ── Automation Time Toggles ── */
-  .time-toggles {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 14px;
-  }
-  .time-toggle {
-    padding: 5px 14px;
     font-size: 12px;
-    font-weight: 500;
-    color: var(--text-dim);
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.15s;
     font-family: inherit;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
   }
-  .time-toggle:hover { border-color: var(--text-dim); color: var(--text-muted); }
-  .time-toggle.active {
-    background: var(--purple-deep);
-    border-color: var(--purple-deep);
-    color: white;
+  .page-btn:hover { background: var(--bg-card); color: var(--text-muted); }
+  .page-btn.active { background: var(--purple-deep); color: white; border-radius: 6px; }
+  .rows-select {
+    display: flex; align-items: center; gap: 4px;
   }
-
-  /* ── Loading Skeleton ── */
-  @keyframes shimmer {
-    0% { background-position: -200px 0; }
-    100% { background-position: 200px 0; }
-  }
-  .skeleton {
-    background: linear-gradient(90deg, var(--bg-card) 25%, #252533 50%, var(--bg-card) 75%);
-    background-size: 400px 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 6px;
+  .rows-select select {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
   }
 
-  /* ── Toast Notification ── */
-  .notification-toast {
+  /* ── State Switcher ── */
+  .state-switcher {
     position: fixed;
-    top: 50px;
-    right: 24px;
+    bottom: 16px; right: 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    z-index: 200;
+    width: 280px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  .state-switcher h3 {
+    font-size: 10px; font-weight: 600;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .state-group { margin-bottom: 10px; }
+  .state-group-title {
+    font-size: 9px; font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--border);
+  }
+  .state-switcher label {
+    display: flex; align-items: center; gap: 6px;
+    padding: 3px 0; font-size: 11px;
+    color: var(--text-muted); cursor: pointer;
+  }
+  .state-switcher label:hover { color: var(--text-primary); }
+  .state-switcher label.active-label { color: var(--purple); font-weight: 500; }
+  .state-switcher input[type="radio"] { accent-color: var(--purple); }
+
+  /* ── Toast ── */
+  .notification-toast {
+    position: fixed; top: 80px; right: 20px;
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-left: 3px solid var(--purple);
     border-radius: 10px;
-    padding: 14px 18px;
-    width: 340px;
+    padding: 12px 16px;
+    width: 320px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.4);
     z-index: 99;
-    transform: translateX(400px);
-    opacity: 0;
+    transform: translateX(360px); opacity: 0;
     transition: all 0.3s ease;
   }
-  .notification-toast.show {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  .toast-header {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--purple-light);
-    margin-bottom: 4px;
-  }
-  .toast-body {
-    font-size: 12px;
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
+  .notification-toast.show { transform: translateX(0); opacity: 1; }
+  .toast-header { font-size: 12px; font-weight: 600; color: var(--purple-light); margin-bottom: 3px; }
+  .toast-body { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
   .toast-close {
-    position: absolute;
-    top: 10px; right: 12px;
-    background: none;
-    border: none;
-    color: var(--text-dim);
-    cursor: pointer;
-    font-size: 14px;
+    position: absolute; top: 8px; right: 10px;
+    background: none; border: none; color: var(--text-dim);
+    cursor: pointer; font-size: 14px;
   }
 
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #3a3a4a; }
 
-  /* Hidden helper */
   .hidden { display: none !important; }
+
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
 <div class="prototype-banner">NOL-18 / NOL-1034 &middot; Campaign Attribution Prototype v3 &middot; March 2026</div>
 
-<!-- Toast Notification -->
+<!-- Toast -->
 <div class="notification-toast" id="toast">
   <button class="toast-close" onclick="hideToast()">&times;</button>
   <div class="toast-header">Campaign Debrief Ready</div>
-  <div class="toast-body">
-    Your debrief for "Wings Wednesday — Feb Special" is ready.<br>
-    <strong style="color:var(--green)">23 bookings &middot; 67 covers &middot; $4,280.00 revenue</strong>
-  </div>
+  <div class="toast-body">Your debrief for "Wings Wednesday" is ready.<br><strong style="color:var(--green)">23 bookings &middot; 67 covers &middot; $4,280.00</strong></div>
 </div>
+
+<!-- Top Nav -->
+<nav class="top-nav">
+  <div class="top-nav-logo">
+    <div class="n-mark">N</div>
+    <span class="wordmark">nollie</span>
+  </div>
+  <div class="top-nav-search">
+    <input type="text" placeholder="Search anything">
+  </div>
+  <div class="top-nav-right">
+    <button class="nav-icon-btn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"/></svg></button>
+    <div class="user-avatar">J</div>
+    <span class="nav-chevron">&#9662;</span>
+  </div>
+</nav>
+
+<!-- App Shell -->
+<div class="app-shell">
 
 <!-- Sidebar -->
 <nav class="sidebar">
-  <div class="sidebar-logo">N</div>
   <div class="sidebar-item">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6Z"/><path d="M3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25Z"/><path d="M13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6Z"/><path d="M13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"/></svg>
     <span>Dashboard</span>
@@ -1057,7 +984,7 @@
     <span>Settings</span>
   </div>
   <div class="sidebar-spacer"></div>
-  <div class="sidebar-item support">
+  <div class="sidebar-item">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/></svg>
     <span>Support</span>
   </div>
@@ -1071,109 +998,50 @@
     <div class="campaign-list-header">
       <h1>Campaigns</h1>
       <div class="campaign-search">
-        <div class="search-input-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
-          <input type="text" placeholder="Search campaigns...">
-        </div>
-        <button class="sort-btn">Last modified &#9662;</button>
-        <button class="filter-btn">Filters</button>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
+        <input type="text" placeholder="Search campaign">
       </div>
     </div>
     <div class="campaign-table-header">
-      <span></span>
-      <span>Name</span>
-      <span style="text-align:right">Status</span>
+      <span class="ch-check"><div class="campaign-checkbox"></div></span>
+      <span class="ch-name">Name</span>
     </div>
-    <div class="campaign-table">
-      <div class="campaign-row active" onclick="selectCampaign(this, 'oneoff')">
+    <div class="campaign-table" id="campaignTable">
+      <div class="campaign-row active" onclick="selectCampaign(this)">
         <div class="campaign-checkbox"></div>
-        <div class="campaign-name-cell">
-          <span class="campaign-name">Wings Wednesday — Feb Special</span>
-          <span class="campaign-meta">Email &middot; 4 Feb 2026</span>
-        </div>
-        <div class="campaign-status-col">
-          <span class="status-badge sent"><span class="dot"></span> Sent</span>
-        </div>
+        <span class="campaign-name">Get 10% off total bill on you...</span>
       </div>
-      <div class="campaign-row" onclick="selectCampaign(this, 'oneoff')">
+      <div class="campaign-row" onclick="selectCampaign(this)">
         <div class="campaign-checkbox"></div>
-        <div class="campaign-name-cell">
-          <span class="campaign-name">Velvet Echo live this weekend...</span>
-          <span class="campaign-meta">Email &middot; 28 Jan 2026</span>
-        </div>
-        <div class="campaign-status-col">
-          <span class="status-badge sent"><span class="dot"></span> Sent</span>
-        </div>
+        <span class="campaign-name">Oktoberfest on the Patio: F...</span>
       </div>
-      <div class="campaign-row" onclick="selectCampaign(this, 'oneoff')">
+      <div class="campaign-row" onclick="selectCampaign(this)" style="background:var(--bg-card)">
         <div class="campaign-checkbox"></div>
-        <div class="campaign-name-cell">
-          <span class="campaign-name">Long Weekend Feast: Savour...</span>
-          <span class="campaign-meta">Email &middot; 22 Jan 2026</span>
-        </div>
-        <div class="campaign-status-col">
-          <span class="status-badge sent"><span class="dot"></span> Sent</span>
-        </div>
+        <span class="campaign-name" style="color:var(--purple)">Fri-yay Fiesta</span>
       </div>
-      <div class="campaign-row" onclick="selectCampaign(this, 'automation')">
+      <div class="campaign-row" onclick="selectCampaign(this)">
         <div class="campaign-checkbox"></div>
-        <div class="campaign-name-cell">
-          <span class="campaign-name">Post-Dining Feedback</span>
-          <span class="campaign-meta">Email, WhatsApp &middot; Automation</span>
-        </div>
-        <div class="campaign-status-col">
-          <span class="status-badge sent"><span class="dot"></span> Active</span>
-        </div>
+        <span class="campaign-name">Long Weekend Feast: Savo...</span>
       </div>
-      <div class="campaign-row" onclick="selectCampaign(this, 'oneoff')">
+      <div class="campaign-row" onclick="selectCampaign(this)">
         <div class="campaign-checkbox"></div>
-        <div class="campaign-name-cell">
-          <span class="campaign-name">Get 10% off on your birthday...</span>
-          <span class="campaign-meta">Email, SMS &middot; 15 Jan 2026</span>
-        </div>
-        <div class="campaign-status-col">
-          <span class="status-badge sent"><span class="dot"></span> Sent</span>
-        </div>
+        <span class="campaign-name">Six Month Reminder</span>
       </div>
-      <div class="campaign-row" onclick="selectCampaign(this, 'oneoff')">
+      <div class="campaign-row" onclick="selectCampaign(this)">
         <div class="campaign-checkbox"></div>
-        <div class="campaign-name-cell">
-          <span class="campaign-name">Six Month Reminder</span>
-          <span class="campaign-meta">Email, WhatsApp &middot; 10 Jan 2026</span>
-        </div>
-        <div class="campaign-status-col">
-          <span class="status-badge sent"><span class="dot"></span> Sent</span>
-        </div>
+        <span class="campaign-name">Post Dining Review</span>
       </div>
-      <div class="campaign-row" onclick="selectCampaign(this, 'oneoff')">
+      <div class="campaign-row" onclick="selectCampaign(this)">
         <div class="campaign-checkbox"></div>
-        <div class="campaign-name-cell">
-          <span class="campaign-name">2-for-1 Entr&eacute;e Extravaganza</span>
-          <span class="campaign-meta">Email &middot; 5 Jan 2026</span>
-        </div>
-        <div class="campaign-status-col">
-          <span class="status-badge sent"><span class="dot"></span> Sent</span>
-        </div>
+        <span class="campaign-name">Large Group pre-order remi...</span>
       </div>
-      <div class="campaign-row" onclick="selectCampaign(this, 'oneoff')">
+      <div class="campaign-row" onclick="selectCampaign(this)">
         <div class="campaign-checkbox"></div>
-        <div class="campaign-name-cell">
-          <span class="campaign-name">Anniversary Special</span>
-          <span class="campaign-meta">Email, WhatsApp &middot; 1 Jan 2026</span>
-        </div>
-        <div class="campaign-status-col">
-          <span class="status-badge draft"><span class="dot"></span> Draft</span>
-        </div>
+        <span class="campaign-name">Two Month Reminder</span>
       </div>
-    </div>
-    <div class="campaign-pagination">
-      <span>1-8 of 24 campaigns</span>
-      <div style="display:flex;gap:4px">
-        <button class="page-btn">&larr;</button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn">2</button>
-        <button class="page-btn">3</button>
-        <button class="page-btn">&rarr;</button>
+      <div class="campaign-row" onclick="selectCampaign(this)">
+        <div class="campaign-checkbox"></div>
+        <span class="campaign-name">2-for-1 Entr&eacute;e Extravaganza</span>
       </div>
     </div>
   </div>
@@ -1183,21 +1051,21 @@
     <div class="drawer-header">
       <div class="drawer-header-top">
         <div>
-          <div class="drawer-title" id="drawerTitle">Wings Wednesday — Feb Special</div>
+          <div class="drawer-title">Fri-yay Fiesta</div>
           <div class="drawer-status">
             <span class="status-dot"></span>
-            <span id="drawerSubtitle">Sent on 4 Feb 2026</span>
+            <span>Sent on 3 Oct 2025</span>
           </div>
         </div>
         <div class="drawer-actions">
           <div class="kebab-wrap">
-            <button title="More actions" onclick="toggleKebab()" id="kebabBtn">&#8942;</button>
+            <button class="icon-btn" onclick="toggleKebab()">&#8942;</button>
             <div class="kebab-menu" id="kebabMenu">
-              <div class="kebab-menu-item">Duplicate</div>
-              <div class="kebab-menu-item danger">Delete</div>
+              <div class="kebab-menu-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75"/></svg> Duplicate</div>
+              <div class="kebab-menu-item danger"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg> Delete</div>
             </div>
           </div>
-          <button title="Expand" id="expandBtn">&#8594;|</button>
+          <button class="icon-btn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>|</button>
         </div>
       </div>
 
@@ -1213,76 +1081,85 @@
       <!-- ═══ TAB: Overview ═══ -->
       <div class="tab-panel" id="tab-overview">
 
+        <!-- Meta -->
+        <div class="meta-section">
+          <div class="meta-row"><span class="meta-label">Channels</span><span class="meta-value">Email</span></div>
+          <div class="meta-row"><span class="meta-label">Audience</span><span class="meta-value">Regular segment (342 recipients)</span></div>
+          <div class="meta-row"><span class="meta-label">Sent</span><span class="meta-value">3 Oct 2025, 11:30 AM</span></div>
+        </div>
+
         <!-- Send Performance -->
-        <div class="section-label">Send performance</div>
+        <div class="section-header">
+          <span class="section-title">Send performance</span>
+          <div class="time-toggles hidden" id="sendToggles">
+            <button class="time-toggle" onclick="setTimeRange(this)">7d</button>
+            <button class="time-toggle" onclick="setTimeRange(this)">30d</button>
+            <button class="time-toggle" onclick="setTimeRange(this)">90d</button>
+            <button class="time-toggle active" onclick="setTimeRange(this)">All time</button>
+          </div>
+        </div>
         <div class="send-stats-grid">
           <div class="send-stat-card">
-            <div class="send-stat-icon delivered">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m4.5 12.75 6 6 9-13.5"/></svg>
+            <div class="send-stat-top">
+              <span class="send-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"/></svg></span>
+              <span class="send-stat-label">Delivered</span>
             </div>
-            <div class="send-stat-label">Delivered</div>
             <div class="send-stat-value">97.8%</div>
-            <div class="send-stat-sub">1,245 of 1,273</div>
+            <div class="send-stat-sub">8,345 delivered</div>
           </div>
           <div class="send-stat-card">
-            <div class="send-stat-icon opened">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.75 9v.906a2.25 2.25 0 0 1-1.183 1.981l-6.478 3.488M2.25 9v.906a2.25 2.25 0 0 0 1.183 1.981l6.478 3.488"/></svg>
+            <div class="send-stat-top">
+              <span class="send-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.75 9v.906a2.25 2.25 0 0 1-1.183 1.981l-6.478 3.488M2.25 9v.906a2.25 2.25 0 0 0 1.183 1.981l6.478 3.488m8.839 2.51-4.66-2.51m0 0-1.023-.55a2.25 2.25 0 0 0-2.134 0l-1.022.55m0 0-4.661 2.51"/></svg></span>
+              <span class="send-stat-label">Open rate</span>
             </div>
-            <div class="send-stat-label">Open rate</div>
             <div class="send-stat-value">45.3%</div>
-            <div class="send-stat-sub">564 opens</div>
+            <div class="send-stat-sub">3,255 opened</div>
           </div>
           <div class="send-stat-card">
-            <div class="send-stat-icon clicked">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5"/></svg>
+            <div class="send-stat-top">
+              <span class="send-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Z"/></svg></span>
+              <span class="send-stat-label">Click rate</span>
             </div>
-            <div class="send-stat-label">Click rate</div>
             <div class="send-stat-value">12.4%</div>
-            <div class="send-stat-sub">154 clicks</div>
+            <div class="send-stat-sub">966 clicked</div>
           </div>
           <div class="send-stat-card">
-            <div class="send-stat-icon bounced">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/></svg>
+            <div class="send-stat-top">
+              <span class="send-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/></svg></span>
+              <span class="send-stat-label">Bounce rate</span>
             </div>
-            <div class="send-stat-label">Bounce rate</div>
             <div class="send-stat-value">2.2%</div>
-            <div class="send-stat-sub">28 bounced</div>
+            <div class="send-stat-sub">185 bounced</div>
           </div>
         </div>
 
         <!-- Attribution Results -->
-        <div class="section-label">Attribution results</div>
-
-        <!-- Automation time toggles (hidden by default) -->
-        <div class="time-toggles hidden" id="automationToggles">
-          <button class="time-toggle" onclick="setTimeRange(this, '7d')">7d</button>
-          <button class="time-toggle active" onclick="setTimeRange(this, '30d')">30d</button>
-          <button class="time-toggle" onclick="setTimeRange(this, '90d')">90d</button>
-          <button class="time-toggle" onclick="setTimeRange(this, 'all')">All time</button>
+        <div class="section-header">
+          <span class="section-title">Attribution results</span>
+          <div class="time-toggles hidden" id="attrToggles">
+            <button class="time-toggle" onclick="setTimeRange(this)">7d</button>
+            <button class="time-toggle" onclick="setTimeRange(this)">30d</button>
+            <button class="time-toggle" onclick="setTimeRange(this)">90d</button>
+            <button class="time-toggle active" onclick="setTimeRange(this)">All time</button>
+          </div>
         </div>
 
-        <div class="attribution-section" id="attributionContent">
-          <!-- Content injected by JS based on state -->
-        </div>
+        <div class="attribution-section" id="attributionContent"></div>
 
       </div><!-- end tab-overview -->
 
       <!-- ═══ TAB: Email Preview ═══ -->
       <div class="tab-panel hidden" id="tab-preview">
         <div class="email-preview-tab">
-          <div class="email-subject-field">
-            <div class="email-subject-label">Subject line</div>
-            <div class="email-subject-input">Wings Wednesday — They're Back</div>
-          </div>
-          <div class="email-body-preview">
-            <img class="email-hero-img" src="https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=600&h=300&fit=crop" alt="Crispy chicken wings">
+          <div class="email-subject-input">Post Dining Feedback</div>
+          <div class="email-body-dark">
+            <img class="email-hero-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=250&fit=crop" alt="Restaurant food">
             <div class="email-body-content">
               <p class="greeting">Hi [First Name],</p>
-              <p>Remember Wings Wednesday? It's back — and better than ever.</p>
-              <p>Every Wednesday this February, we're serving up our famous buffalo wings with a new Korean glaze option. Half-price wings from 5pm, plus $8 pints of craft beer on tap.</p>
-              <p>Last time we ran this, tables filled up by 6pm. Don't miss out.</p>
-              <a class="email-cta-btn">Book Wednesday &rarr;</a>
-              <p class="email-fine-print">You're receiving this because you've dined with us before. We only send emails worth reading.</p>
+              <p>Thank you for dining with us at John's Pizza, we truly appreciate your visit.</p>
+              <p>We're always looking to make every meal memorable, and your feedback helps us do just that. Would you take a minute to share your thoughts about your recent experience?</p>
+              <p>Your input will help us serve you even better.</p>
+              <p>We hope to welcome you back soon for another great meal!</p>
             </div>
           </div>
         </div>
@@ -1290,9 +1167,9 @@
 
       <!-- ═══ TAB: Recipients ═══ -->
       <div class="tab-panel hidden" id="tab-recipients">
-        <div class="recipients-header">
-          <div style="font-size:14px;font-weight:600;color:var(--text-primary)">1,245 Recipients</div>
-          <input type="text" class="recipients-search" placeholder="Search recipients...">
+        <div class="recipients-search-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
+          <input type="text" class="recipients-search" placeholder="Search recipients">
         </div>
         <div class="recipients-table">
           <div class="recipients-table-header">
@@ -1301,81 +1178,30 @@
             <span>Clicked</span>
             <span>Booked</span>
           </div>
-          <div class="recipient-row">
-            <span class="recipient-name">Sarah Chen</span>
-            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
-            <span class="recipient-clicked yes">&#10003; Yes</span>
-            <span class="recipient-booked yes">&#10003; Booked</span>
-          </div>
-          <div class="recipient-row">
-            <span class="recipient-name">Marcus Thompson</span>
-            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
-            <span class="recipient-clicked no">&#10007; No</span>
-            <span class="recipient-booked yes">&#10003; Booked</span>
-          </div>
-          <div class="recipient-row">
-            <span class="recipient-name">Emma Williams</span>
-            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
-            <span class="recipient-clicked yes">&#10003; Yes</span>
-            <span class="recipient-booked no">&mdash;</span>
-          </div>
-          <div class="recipient-row">
-            <span class="recipient-name">James O'Brien</span>
-            <span class="recipient-status"><span class="dot delivered"></span> Delivered</span>
-            <span class="recipient-clicked no">&#10007; No</span>
-            <span class="recipient-booked no">&mdash;</span>
-          </div>
-          <div class="recipient-row">
-            <span class="recipient-name">Anika Patel</span>
-            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
-            <span class="recipient-clicked yes">&#10003; Yes</span>
-            <span class="recipient-booked yes">&#10003; Booked</span>
-          </div>
-          <div class="recipient-row">
-            <span class="recipient-name">Tom Nguyen</span>
-            <span class="recipient-status"><span class="dot bounced"></span> Bounced</span>
-            <span class="recipient-clicked no">&mdash;</span>
-            <span class="recipient-booked no">&mdash;</span>
-          </div>
-          <div class="recipient-row">
-            <span class="recipient-name">Lily Foster</span>
-            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
-            <span class="recipient-clicked no">&#10007; No</span>
-            <span class="recipient-booked yes">&#10003; Booked</span>
-          </div>
-          <div class="recipient-row">
-            <span class="recipient-name">David Kim</span>
-            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
-            <span class="recipient-clicked yes">&#10003; Yes</span>
-            <span class="recipient-booked no">&mdash;</span>
-          </div>
-          <div class="recipient-row">
-            <span class="recipient-name">Priya Sharma</span>
-            <span class="recipient-status"><span class="dot opened"></span> Opened</span>
-            <span class="recipient-clicked no">&#10007; No</span>
-            <span class="recipient-booked no">&mdash;</span>
-          </div>
-          <div class="recipient-row">
-            <span class="recipient-name">Jack Morrison</span>
-            <span class="recipient-status"><span class="dot delivered"></span> Delivered</span>
-            <span class="recipient-clicked no">&#10007; No</span>
-            <span class="recipient-booked no">&mdash;</span>
-          </div>
+          <div class="recipient-row"><span class="recipient-name">Sarah Chen</span><span class="recipient-status"><span class="rdot opened"></span> Opened</span><span class="r-check">&#10003; Yes</span><span class="r-check">&#10003; Booked</span></div>
+          <div class="recipient-row"><span class="recipient-name">Marcus Thompson</span><span class="recipient-status"><span class="rdot opened"></span> Opened</span><span class="r-check">&#10003; Yes</span><span class="r-check">&#10003; Booked</span></div>
+          <div class="recipient-row"><span class="recipient-name">Emma Williams</span><span class="recipient-status"><span class="rdot opened"></span> Opened</span><span class="r-check">&#10003; Yes</span><span class="r-dash">-</span></div>
+          <div class="recipient-row"><span class="recipient-name">James O'Brien</span><span class="recipient-status"><span class="rdot opened"></span> Opened</span><span class="r-x">&#10007; No</span><span class="r-dash">-</span></div>
+          <div class="recipient-row"><span class="recipient-name">Anika Patel</span><span class="recipient-status"><span class="rdot bounced"></span> Bounced</span><span class="r-dash">-</span><span class="r-dash">-</span></div>
+          <div class="recipient-row"><span class="recipient-name">Tom Nguyen</span><span class="recipient-status"><span class="rdot delivered"></span> Delivered</span><span class="r-check">&#10003; Yes</span><span class="r-dash">-</span></div>
+          <div class="recipient-row"><span class="recipient-name">Lily Foster</span><span class="recipient-status"><span class="rdot delivered"></span> Delivered</span><span class="r-dash">-</span><span class="r-dash">-</span></div>
+          <div class="recipient-row"><span class="recipient-name">Greg Hirsch</span><span class="recipient-status"><span class="rdot delivered"></span> Delivered</span><span class="r-dash">-</span><span class="r-dash">-</span></div>
+          <div class="recipient-row"><span class="recipient-name">David Kim</span><span class="recipient-status"><span class="rdot delivered"></span> Delivered</span><span class="r-dash">-</span><span class="r-dash">-</span></div>
+          <div class="recipient-row"><span class="recipient-name">Priya Sharma</span><span class="recipient-status"><span class="rdot delivered"></span> Delivered</span><span class="r-dash">-</span><span class="r-dash">-</span></div>
         </div>
         <div class="recipients-pagination">
-          <div class="rows-per-page">
-            Rows per page:
-            <select><option>10</option><option>25</option><option>50</option></select>
-          </div>
-          <span>1-10 of 1,245</span>
+          <div class="rows-select">Rows per page: <select><option>10</option><option>25</option><option>50</option></select></div>
+          <span>1-10 of 132</span>
           <div class="page-controls">
-            <button class="page-btn">&larr;</button>
+            <button class="page-btn">|&laquo;</button>
+            <button class="page-btn">&lsaquo;</button>
             <button class="page-btn active">1</button>
             <button class="page-btn">2</button>
-            <button class="page-btn">3</button>
             <button class="page-btn">...</button>
-            <button class="page-btn">125</button>
-            <button class="page-btn">&rarr;</button>
+            <button class="page-btn">12</button>
+            <button class="page-btn">13</button>
+            <button class="page-btn">&rsaquo;</button>
+            <button class="page-btn">&raquo;|</button>
           </div>
         </div>
       </div><!-- end tab-recipients -->
@@ -1383,303 +1209,129 @@
     </div>
   </div>
 </div>
+</div>
 
 <!-- State Switcher -->
 <div class="state-switcher" id="stateSwitcher">
-  <h3>Prototype State Switcher</h3>
-
+  <h3>State Switcher</h3>
   <div class="state-group">
     <div class="state-group-title">One-off Campaign</div>
     <label class="active-label"><input type="radio" name="state" value="closed-data" checked onchange="setState(this.value)"> Closed + data (complete)</label>
-    <label><input type="radio" name="state" value="closed-debrief" onchange="setState(this.value)"> Closed + debrief generated</label>
-    <label><input type="radio" name="state" value="closed-no-booking-system" onchange="setState(this.value)"> Closed + no booking system</label>
-    <label><input type="radio" name="state" value="closed-no-avg-spend" onchange="setState(this.value)"> Closed + no avg spend</label>
-    <label><input type="radio" name="state" value="closed-no-bookings" onchange="setState(this.value)"> Closed + no bookings</label>
-    <label><input type="radio" name="state" value="open-data" onchange="setState(this.value)"> Open + data (9/14 days)</label>
-    <label><input type="radio" name="state" value="open-no-data" onchange="setState(this.value)"> Open + no data yet</label>
+    <label><input type="radio" name="state" value="closed-debrief" onchange="setState(this.value)"> Closed + debrief</label>
+    <label><input type="radio" name="state" value="closed-no-booking" onchange="setState(this.value)"> No booking system</label>
+    <label><input type="radio" name="state" value="closed-no-spend" onchange="setState(this.value)"> No avg spend</label>
+    <label><input type="radio" name="state" value="closed-no-bookings" onchange="setState(this.value)"> No bookings (closed)</label>
+    <label><input type="radio" name="state" value="open-data" onchange="setState(this.value)"> Open + data (9/14)</label>
+    <label><input type="radio" name="state" value="open-no-data" onchange="setState(this.value)"> Open + no data</label>
   </div>
-
   <div class="state-group">
     <div class="state-group-title">Automation</div>
-    <label><input type="radio" name="state" value="automation" onchange="setState(this.value)"> Automation view (time toggles)</label>
+    <label><input type="radio" name="state" value="automation" onchange="setState(this.value)"> Automation (time toggles)</label>
   </div>
-
-  <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
-    <label style="font-size:11px;color:var(--text-dim);cursor:pointer" onclick="toggleSwitcher()">Hide panel (press <kbd style="background:var(--bg-card);padding:1px 5px;border-radius:3px;border:1px solid var(--border)">S</kbd> to toggle)</label>
+  <div style="margin-top:8px;padding-top:6px;border-top:1px solid var(--border);font-size:10px;color:var(--text-dim)">
+    Press <kbd style="background:var(--bg-card);padding:1px 4px;border-radius:3px;border:1px solid var(--border)">S</kbd> to toggle
   </div>
 </div>
 
 <script>
-// ── State Management ──
 let currentState = 'closed-data';
-let debriefGenerated = false;
-let campaignType = 'oneoff';
 
 function setState(state) {
   currentState = state;
-  debriefGenerated = state === 'closed-debrief';
-  campaignType = state === 'automation' ? 'automation' : 'oneoff';
-
-  // Update active label
   document.querySelectorAll('.state-switcher label').forEach(l => l.classList.remove('active-label'));
   const checked = document.querySelector(`input[value="${state}"]`);
   if (checked) checked.closest('label').classList.add('active-label');
 
-  // Show/hide automation toggles
-  document.getElementById('automationToggles').classList.toggle('hidden', state !== 'automation');
+  const isAuto = state === 'automation';
+  document.getElementById('sendToggles').classList.toggle('hidden', !isAuto);
+  document.getElementById('attrToggles').classList.toggle('hidden', !isAuto);
 
   renderAttribution();
-  // Switch to overview tab
   switchTab('overview', document.querySelector('.view-tab'));
 }
 
 function renderAttribution() {
-  const container = document.getElementById('attributionContent');
-  let html = '';
-
-  switch (currentState) {
-    case 'closed-data':
-      html = renderClosedWithData(false);
-      break;
-    case 'closed-debrief':
-      html = renderClosedWithData(true);
-      break;
-    case 'closed-no-booking-system':
-      html = renderNoBookingSystem();
-      break;
-    case 'closed-no-avg-spend':
-      html = renderNoAvgSpend();
-      break;
-    case 'closed-no-bookings':
-      html = renderNoBookings();
-      break;
-    case 'open-data':
-      html = renderOpenWithData();
-      break;
-    case 'open-no-data':
-      html = renderOpenNoData();
-      break;
-    case 'automation':
-      html = renderAutomation();
-      break;
-  }
-
-  container.innerHTML = html;
+  const c = document.getElementById('attributionContent');
+  const fns = {
+    'closed-data': () => progress(true) + metrics(23,'1.84%',67,'$4,280.00','$3.40') + debriefBtn(),
+    'closed-debrief': () => progress(true) + metrics(23,'1.84%',67,'$4,280.00','$3.40') + debriefCard(),
+    'closed-no-booking': () => progress(true) + emptyState('booking'),
+    'closed-no-spend': () => progress(true) + metricsPartial() + emptyState('spend') + debriefBtn(),
+    'closed-no-bookings': () => progress(true) + emptyState('none'),
+    'open-data': () => progress(false,9) + metrics(14,'1.12%',38,'$2,432.00','$1.95') + debriefBtn(),
+    'open-no-data': () => progress(false,3) + emptyState('waiting'),
+    'automation': () => metrics(89,'2.41%',247,'$15,808.00','$4.28') + debriefBtn(),
+  };
+  c.innerHTML = (fns[currentState] || fns['closed-data'])();
 }
 
-function renderProgressBar(complete, days) {
-  if (complete) {
-    return `
-      <div class="progress-indicator">
-        <div class="progress-check complete">&#10003;</div>
-        <div class="progress-bar-wrap"><div class="progress-bar-fill complete"></div></div>
-        <div class="progress-text"><strong>14-day attribution window</strong> &middot; Complete</div>
-      </div>`;
-  }
-  const pct = Math.round((days / 14) * 100);
-  return `
-    <div class="progress-indicator">
-      <div class="progress-check partial" style="font-size:9px">${days}</div>
-      <div class="progress-bar-wrap"><div class="progress-bar-fill partial" style="width:${pct}%"></div></div>
-      <div class="progress-text">Attribution window: <strong>${days} of 14 days</strong> elapsed &middot; Results still accumulating</div>
-    </div>`;
+function progress(complete, days) {
+  if (complete) return `<div class="progress-indicator"><div class="progress-icon complete"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m4.5 12.75 6 6 9-13.5"/></svg></div><div class="progress-bar-wrap"><div class="progress-bar-fill complete"></div></div><div class="progress-text">14-day attribution window &middot; Complete</div></div>`;
+  const pct = Math.round((days/14)*100);
+  return `<div class="progress-indicator"><div class="progress-icon partial"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg></div><div class="progress-bar-wrap"><div class="progress-bar-fill partial" style="width:${pct}%"></div></div><div class="progress-text">Attribution window: ${days} of 14 days elapsed &nbsp;&middot;&nbsp; Results still accumulating</div></div>`;
 }
 
-function renderMetricCards(bookings, convRate, covers, revenue, revPerEmail) {
-  return `
-    <div class="attr-metrics-grid">
-      <div class="attr-metric-card">
-        <div class="attr-metric-value">${bookings}</div>
-        <div class="attr-metric-label">Bookings</div>
-      </div>
-      <div class="attr-metric-card">
-        <div class="attr-metric-value">${convRate}</div>
-        <div class="attr-metric-label">Booking conversions</div>
-      </div>
-      <div class="attr-metric-card">
-        <div class="attr-metric-value">${covers}</div>
-        <div class="attr-metric-label">Covers</div>
-      </div>
+function metrics(bookings, conv, covers, rev, rpe) {
+  return `<div class="attr-metrics-grid">
+    <div class="attr-metric-card"><div class="attr-metric-label">Bookings</div><div class="attr-metric-value">${bookings}</div><div class="attr-metric-sub">Bookings within attribution window</div></div>
+    <div class="attr-metric-card"><div class="attr-metric-label">Booking conversions</div><div class="attr-metric-value">${conv}</div><div class="attr-metric-sub">Bookings &divide; emails delivered</div></div>
+    <div class="attr-metric-card"><div class="attr-metric-label">Covers</div><div class="attr-metric-value">${covers}</div><div class="attr-metric-sub">Total party size</div></div>
+  </div>
+  <div class="attr-revenue-grid">
+    <div class="attr-revenue-card"><div><div class="attr-revenue-label">Revenue</div><div class="attr-revenue-sub">Est. based on avg. spend per cover</div></div><div class="attr-revenue-value">${rev}</div></div>
+    <div class="attr-revenue-card"><div><div class="attr-revenue-label">Revenue per Email</div><div class="attr-revenue-sub">Revenue &divide; emails delivered</div></div><div class="attr-revenue-value">${rpe}</div></div>
+  </div>`;
+}
+
+function metricsPartial() {
+  return `<div class="attr-metrics-grid">
+    <div class="attr-metric-card"><div class="attr-metric-label">Bookings</div><div class="attr-metric-value">23</div><div class="attr-metric-sub">Bookings within attribution window</div></div>
+    <div class="attr-metric-card"><div class="attr-metric-label">Booking conversions</div><div class="attr-metric-value">1.84%</div><div class="attr-metric-sub">Bookings &divide; emails delivered</div></div>
+    <div class="attr-metric-card"><div class="attr-metric-label">Covers</div><div class="attr-metric-value">67</div><div class="attr-metric-sub">Total party size</div></div>
+  </div>`;
+}
+
+function emptyState(type) {
+  const states = {
+    booking: { text: 'Connect your booking system to see which campaigns drive reservations', link: 'Set up', icon: 'calendar' },
+    spend: { text: 'Add your estimated average spend per cover.', link: 'Set up', icon: 'dollar' },
+    none: { text: 'No bookings were attributed to this campaign within the 14-day window.', link: null, icon: 'empty' },
+    waiting: { text: 'Attribution data will appear here as customers book after receiving this campaign', link: null, icon: 'clock' },
+  };
+  const s = states[type];
+  const iconSvg = {
+    calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/></svg>',
+    dollar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>',
+    empty: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>',
+  }[s.icon];
+  return `<div class="empty-state-card"><div class="empty-state-illustration">${iconSvg}</div><div class="empty-state-content"><div class="empty-state-text">${s.text}</div>${s.link ? `<a class="empty-state-link">${s.link} &rarr;</a>` : ''}</div></div>`;
+}
+
+function debriefBtn() {
+  return `<button class="generate-debrief-btn" id="generateBtn" onclick="generateDebrief()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/></svg> Generate Campaign Debrief</button>`;
+}
+
+function debriefCard() {
+  const isOpen = currentState.startsWith('open');
+  return `<div class="debrief-card">
+    <div class="debrief-header">
+      <div class="debrief-header-left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/></svg> AI Campaign Debrief</div>
+      <button class="analyze-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182"/></svg> Analyze</button>
     </div>
-    <div class="attr-metrics-row-2">
-      <div class="attr-metric-card">
-        <div class="attr-metric-value" style="color:var(--green)">${revenue}</div>
-        <div class="attr-metric-label">Est. Revenue</div>
-        <div class="attr-metric-sub">Based on avg. spend per cover</div>
+    <div class="debrief-body">
+      <div class="debrief-headline">Strong performer</div>
+      <div class="debrief-summary">This campaign reached 342 regulars with a 41% open rate — well above your venue average of 28%. The single, clear CTA ("Book Wednesday") and urgency framing drove a 6.7% booking conversion, your second-best this quarter.</div>
+      <div class="debrief-metrics-row">
+        <div class="debrief-metric-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m4.5 12.75 6 6 9-13.5"/></svg> <span class="label">Bookings</span> <span class="val">23</span></div>
+        <div class="debrief-metric-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m4.5 12.75 6 6 9-13.5"/></svg> <span class="label">Covers</span> <span class="val">67</span></div>
+        <div class="debrief-metric-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m4.5 12.75 6 6 9-13.5"/></svg> <span class="label">Revenue</span> <span class="val">$4,280.00</span></div>
       </div>
-      <div class="attr-metric-card">
-        <div class="attr-metric-value" style="color:var(--blue)">${revPerEmail}</div>
-        <div class="attr-metric-label">Revenue per email</div>
-      </div>
-    </div>`;
-}
-
-function renderClosedWithData(withDebrief) {
-  let html = renderProgressBar(true);
-  html += renderMetricCards('23', '1.84%', '67', '$4,280.00', '$3.40');
-
-  if (withDebrief) {
-    html += renderDebriefCard();
-  } else {
-    html += `
-      <button class="generate-debrief-btn" id="generateBtn" onclick="generateDebrief()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/></svg>
-        Generate Campaign Debrief
-      </button>`;
-  }
-  return html;
-}
-
-function renderDebriefCard() {
-  return `
-    <div class="debrief-card">
-      <div class="debrief-header">
-        <div class="debrief-header-left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/></svg>
-          AI Campaign Debrief
-        </div>
-        <div class="debrief-actions">
-          <button class="debrief-btn" onclick="generateDebrief()">&#8635; Refresh</button>
-          <button class="debrief-btn">Analyze</button>
-        </div>
-      </div>
-      <div class="debrief-body">
-        <div class="debrief-headline">Strong performer</div>
-        <div class="debrief-summary">
-          This campaign reached 1,245 regulars with a 45.3% open rate — well above your venue average of 28%. The single, clear CTA ("Book Wednesday") and urgency framing drove 23 bookings from 67 covers, your second-best result this quarter.
-        </div>
-
-        <div class="debrief-metrics-row">
-          <div class="debrief-metric-item">
-            <div class="debrief-metric-val">23</div>
-            <div class="debrief-metric-lbl">Bookings</div>
-          </div>
-          <div class="debrief-metric-item">
-            <div class="debrief-metric-val">67</div>
-            <div class="debrief-metric-lbl">Covers</div>
-          </div>
-          <div class="debrief-metric-item">
-            <div class="debrief-metric-val">$4,280</div>
-            <div class="debrief-metric-lbl">Revenue</div>
-          </div>
-        </div>
-
-        <div class="debrief-section">
-          <div class="debrief-section-label">What worked</div>
-          <div class="debrief-section-text">
-            Subject line "Wings Wednesday — They're Back" had a 45.3% open rate vs your 28% average — the casual, specific tone resonated with your regulars. Single CTA focus ("Book Wednesday") outperformed your last newsletter which had 4 CTAs and only 3.1% booking conversion.
-          </div>
-        </div>
-
-        <div class="debrief-section">
-          <div class="debrief-section-label">Recommendation</div>
-          <div class="debrief-section-text">
-            The 541 openers who didn't book are warm leads — try a Tuesday reminder to this segment with a smaller incentive like a complimentary side. Your lapsed-60-day segment hasn't received a Wings Wednesday campaign yet — they could be your biggest untapped opportunity.
-          </div>
-        </div>
-
-        <div class="debrief-footer" id="debriefFooter" style="display:none">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
-          <span>More data is still coming in. Try again in 5 days for better insights.</span>
-        </div>
-      </div>
-    </div>`;
-}
-
-function renderNoBookingSystem() {
-  let html = renderProgressBar(true);
-  html += `
-    <div class="empty-state">
-      <div class="empty-state-icon">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/></svg>
-      </div>
-      <div class="empty-state-title">Connect your booking system</div>
-      <div class="empty-state-text">Connect your booking system to see which campaigns drive reservations.</div>
-      <a class="empty-state-link">Set up &rarr;</a>
-    </div>`;
-  return html;
-}
-
-function renderNoAvgSpend() {
-  let html = renderProgressBar(true);
-  html += `
-    <div class="attr-metrics-grid">
-      <div class="attr-metric-card">
-        <div class="attr-metric-value">23</div>
-        <div class="attr-metric-label">Bookings</div>
-      </div>
-      <div class="attr-metric-card">
-        <div class="attr-metric-value">1.84%</div>
-        <div class="attr-metric-label">Booking conversions</div>
-      </div>
-      <div class="attr-metric-card">
-        <div class="attr-metric-value">67</div>
-        <div class="attr-metric-label">Covers</div>
-      </div>
+      <div class="debrief-section"><div class="debrief-section-label">What worked</div><div class="debrief-section-text">The personalised subject line mentioning "it's been a while" drove 18% higher opens than your standard campaigns. Sending on Thursday at 10am also hit your audience's peak engagement window.</div></div>
+      <div class="debrief-section"><div class="debrief-section-label">Recommendation</div><div class="debrief-section-text">Consider creating a follow-up campaign targeting the 528 openers who didn't book — a smaller incentive or "tables filling up" urgency could convert fence-sitters.</div></div>
+      <div class="debrief-footer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg> <span>More data is still coming in. Try again in 5 days for better insights.</span></div>
     </div>
-    <div class="attr-metrics-row-2">
-      <div class="upsell-metric-card" style="grid-column: span 2">
-        <div style="margin-bottom:4px">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5"><path d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-        </div>
-        <div class="upsell-metric-text">Add your estimated average spend per cover to see revenue attribution for your campaigns.</div>
-        <a class="upsell-metric-link">Add in Settings &rarr;</a>
-      </div>
-    </div>`;
-  html += `
-    <button class="generate-debrief-btn" onclick="generateDebrief()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/></svg>
-      Generate Campaign Debrief
-    </button>`;
-  return html;
-}
-
-function renderNoBookings() {
-  let html = renderProgressBar(true);
-  html += `
-    <div class="empty-state">
-      <div class="empty-state-icon">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5"><path d="M3 3l18 18M10.5 10.677a2 2 0 0 0 2.823 2.823M7.362 7.561C5.68 8.74 4.279 10.42 3 12c1.889 2.991 5.282 6 9 6 1.55 0 3.043-.523 4.395-1.35M12 6c3.718 0 7.111 3.009 9 6-.947 1.497-2.2 2.93-3.6 4.04"/></svg>
-      </div>
-      <div class="empty-state-title">No bookings attributed</div>
-      <div class="empty-state-text">No bookings were attributed to this campaign within the 14-day attribution window.</div>
-    </div>`;
-  return html;
-}
-
-function renderOpenWithData() {
-  let html = renderProgressBar(false, 9);
-  html += renderMetricCards('14', '1.12%', '38', '$2,432.00', '$1.95');
-  html += `
-    <button class="generate-debrief-btn" onclick="generateDebrief()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/></svg>
-      Generate Campaign Debrief
-    </button>`;
-  return html;
-}
-
-function renderOpenNoData() {
-  let html = renderProgressBar(false, 3);
-  html += `
-    <div class="empty-state">
-      <div class="empty-state-icon">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5"><path d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-      </div>
-      <div class="empty-state-title">Waiting for data</div>
-      <div class="empty-state-text">Attribution data will appear here as customers book after receiving this campaign.</div>
-    </div>`;
-  return html;
-}
-
-function renderAutomation() {
-  // No progress bar for automations
-  let html = renderMetricCards('89', '2.41%', '247', '$15,808.00', '$4.28');
-  html += `
-    <button class="generate-debrief-btn" onclick="generateDebrief()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/></svg>
-      Generate Campaign Debrief
-    </button>`;
-  return html;
+  </div>`;
 }
 
 // ── Interactions ──
@@ -1694,123 +1346,46 @@ function switchTab(tabId, el) {
 function generateDebrief() {
   const btn = document.getElementById('generateBtn');
   if (btn) {
-    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182"/></svg> Analysing campaign performance...</span>';
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182"/></svg> Analysing campaign performance...';
     btn.disabled = true;
   }
-
-  // Add spinner animation
-  if (!document.getElementById('spinStyle')) {
-    const style = document.createElement('style');
-    style.id = 'spinStyle';
-    style.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
-    document.head.appendChild(style);
-  }
-
   setTimeout(() => {
-    debriefGenerated = true;
-
-    // Determine if we show the footer note (open window)
-    const isOpen = currentState === 'open-data';
-
-    // Re-render with debrief
-    const container = document.getElementById('attributionContent');
+    // Re-render current state with debrief
+    const c = document.getElementById('attributionContent');
     let html = '';
-
-    if (currentState === 'open-data') {
-      html = renderProgressBar(false, 9);
-      html += renderMetricCards('14', '1.12%', '38', '$2,432.00', '$1.95');
-    } else if (currentState === 'automation') {
-      html += renderMetricCards('89', '2.41%', '247', '$15,808.00', '$4.28');
-    } else if (currentState === 'closed-no-avg-spend') {
-      html = renderProgressBar(true);
-      html += `
-        <div class="attr-metrics-grid">
-          <div class="attr-metric-card"><div class="attr-metric-value">23</div><div class="attr-metric-label">Bookings</div></div>
-          <div class="attr-metric-card"><div class="attr-metric-value">1.84%</div><div class="attr-metric-label">Booking conversions</div></div>
-          <div class="attr-metric-card"><div class="attr-metric-value">67</div><div class="attr-metric-label">Covers</div></div>
-        </div>
-        <div class="attr-metrics-row-2">
-          <div class="upsell-metric-card" style="grid-column: span 2">
-            <div style="margin-bottom:4px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5"><path d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg></div>
-            <div class="upsell-metric-text">Add your estimated average spend per cover to see revenue attribution for your campaigns.</div>
-            <a class="upsell-metric-link">Add in Settings &rarr;</a>
-          </div>
-        </div>`;
-    } else {
-      html = renderProgressBar(true);
-      html += renderMetricCards('23', '1.84%', '67', '$4,280.00', '$3.40');
-    }
-
-    html += renderDebriefCard();
-    container.innerHTML = html;
-
-    // Show/hide footer based on open window
-    const footer = document.getElementById('debriefFooter');
-    if (footer && isOpen) {
-      footer.style.display = 'flex';
-    }
-
-    // Show toast
+    if (currentState === 'open-data') html = progress(false,9) + metrics(14,'1.12%',38,'$2,432.00','$1.95');
+    else if (currentState === 'automation') html = metrics(89,'2.41%',247,'$15,808.00','$4.28');
+    else if (currentState === 'closed-no-spend') html = progress(true) + metricsPartial() + emptyState('spend');
+    else html = progress(true) + metrics(23,'1.84%',67,'$4,280.00','$3.40');
+    html += debriefCard();
+    c.innerHTML = html;
     showToast();
-
-    // Scroll to debrief
-    const card = container.querySelector('.debrief-card');
+    const card = c.querySelector('.debrief-card');
     if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 2000);
 }
 
-function selectCampaign(row, type) {
-  document.querySelectorAll('.campaign-row').forEach(r => r.classList.remove('active'));
+function selectCampaign(row) {
+  document.querySelectorAll('.campaign-row').forEach(r => { r.classList.remove('active'); r.style.background = ''; r.querySelector('.campaign-name').style.color = ''; });
   row.classList.add('active');
-  campaignType = type;
-
-  if (type === 'automation') {
-    document.getElementById('drawerTitle').textContent = 'Post-Dining Feedback';
-    document.getElementById('drawerSubtitle').textContent = 'Automation · Active since 1 Dec 2025';
-    setState('automation');
-  }
+  row.style.background = 'var(--bg-card)';
+  row.querySelector('.campaign-name').style.color = 'var(--purple)';
 }
 
-function toggleKebab() {
-  document.getElementById('kebabMenu').classList.toggle('show');
-}
+function toggleKebab() { document.getElementById('kebabMenu').classList.toggle('show'); }
+document.addEventListener('click', (e) => { if (!e.target.closest('.kebab-wrap')) document.getElementById('kebabMenu').classList.remove('show'); });
 
-// Close kebab on outside click
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.kebab-wrap')) {
-    document.getElementById('kebabMenu').classList.remove('show');
-  }
-});
-
-function setTimeRange(btn, range) {
-  document.querySelectorAll('.time-toggle').forEach(b => b.classList.remove('active'));
+function setTimeRange(btn) {
+  btn.closest('.time-toggles').querySelectorAll('.time-toggle').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  // In a real app, this would fetch new data. For prototype, just visual.
 }
 
-function showToast() {
-  const toast = document.getElementById('toast');
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 5000);
-}
+function showToast() { document.getElementById('toast').classList.add('show'); setTimeout(() => document.getElementById('toast').classList.remove('show'), 5000); }
+function hideToast() { document.getElementById('toast').classList.remove('show'); }
 
-function hideToast() {
-  document.getElementById('toast').classList.remove('show');
-}
+function toggleSwitcher() { document.getElementById('stateSwitcher').classList.toggle('hidden'); }
+document.addEventListener('keydown', (e) => { if (e.key === 's' && !e.ctrlKey && !e.metaKey && e.target.tagName !== 'INPUT') toggleSwitcher(); });
 
-// ── State Switcher Toggle ──
-function toggleSwitcher() {
-  const sw = document.getElementById('stateSwitcher');
-  sw.classList.toggle('hidden');
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 's' && !e.ctrlKey && !e.metaKey && e.target.tagName !== 'INPUT') {
-    toggleSwitcher();
-  }
-});
-
-// ── Init ──
 renderAttribution();
 </script>
 
